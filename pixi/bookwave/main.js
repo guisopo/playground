@@ -19,6 +19,7 @@ sections.forEach(section => {
   //Make new Image
   let image = null;
   let displacementImage = null;
+  let rgbFilter = new PIXI.filters.RGBSplitFilter([10,0], [0,10], [-5,-5]);
 
   //Make new loader
   const loader = new PIXI.loaders.Loader();
@@ -44,7 +45,8 @@ sections.forEach(section => {
 
     //Add filter to the image
     image.filters = [
-      new PIXI.filters.DisplacementFilter(displacementImage, 100)
+      new PIXI.filters.DisplacementFilter(displacementImage, 100),
+      rgbFilter
     ];
 
     //Add image to app
