@@ -25,7 +25,7 @@ sections.forEach(section => {
 
   //Load images
   loader.add('image', originalImgSrc);
-  loader.add('displacement', './assets/displacement1.jpg');
+  loader.add('displacement', './assets/displacement3.jpg');
   loader.load((loader, resources) => {
     //Once image loaded do this
     image = new PIXI.Sprite(resources.image.texture);
@@ -37,11 +37,22 @@ sections.forEach(section => {
     image.height = 600;
     image.interactive = true;
 
+    displacementImage.width = 300;
+    displacementImage.height = 300;
+    
+    //Add filter to the image
     image.filters = [
       new PIXI.filters.DisplacementFilter(displacementImage, 10)
     ];
 
     //Add image to app
     app.stage.addChild(image);
+    app.stage.addChild(displacementImage);
+
+    //Add ticker
+    app.ticker.add(() => {
+      displacementImage.x = displacementImage.x + 1;
+    });
   })
+
 });
