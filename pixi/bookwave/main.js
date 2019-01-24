@@ -19,14 +19,14 @@ sections.forEach(section => {
   //Make new Image
   let image = null;
   let displacementImage = null;
-  let rgbFilter = new PIXI.filters.RGBSplitFilter([10,0], [0,10], [-5,-5]);
+  // let rgbFilter = new PIXI.filters.RGBSplitFilter([10,0], [0,10], [-5,-5]);
 
   //Make new loader
   const loader = new PIXI.loaders.Loader();
 
   //Load images
   loader.add('image', originalImgSrc);
-  loader.add('displacement', './assets/displacement1.jpg');
+  loader.add('displacement', './assets/displacement3.jpg');
 
   loader.load((loader, resources) => {
     //Once image loaded do this
@@ -39,14 +39,14 @@ sections.forEach(section => {
     image.height = 600;
     image.interactive = true;
 
-    displacementImage.width = 600;
-    displacementImage.height = 600;
+    displacementImage.width = 500;
+    displacementImage.height = 500;
     displacementImage.texture.baseTexture.wrapMode = PIXI.WRAP_MODES.REPEAT;
 
     //Add filter to the image
     image.filters = [
-      new PIXI.filters.DisplacementFilter(displacementImage, 100),
-      rgbFilter
+      new PIXI.filters.DisplacementFilter(displacementImage, 20),
+      // rgbFilter
     ];
 
     //Add image to app
@@ -55,10 +55,43 @@ sections.forEach(section => {
 
     //Add ticker
     app.ticker.add(() => {
-      displacementImage.x = displacementImage.x + 1;
-      displacementImage.y = displacementImage.y + 1;
+      // displacementImage.x = displacementImage.x + 1;
+      // displacementImage.y = displacementImage.y + 1;
       // displacementImage.rotation += 0.001; 0
     });
-  })
+  });
+
+  let currentX = 0;
+  let aimX =  0;
+  let currentY = 0;
+  let aimY =  0;
+
+  //Listen mouse movement
+  section.addEventListener('mousemove', (event) => {
+    aimX = event.pageX;
+    aimY = event.pageY;
+    // displacementImage.y = event.pageY;
+  });
+
+  //Animate
+  const animate = function() {
+    //currentX should get towards aimX every frame
+    const diffX = aimX - currentX;
+    const diffY = aimY - currentY;
+    //ease current X
+    currentX = currentX + diffX * 0.015;
+    currentY = currentY + diffY * 0.015;
+
+    //if there is displacement image, move it
+    if(displacementImage) {
+      displacementImage.x = currentX;
+      displacementImage.y = currentY;
+    }
+
+    requestAnimationFrame(animate);
+  }
+
+  //Load animation
+  animate();
 
 });
