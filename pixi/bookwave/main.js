@@ -19,14 +19,14 @@ sections.forEach(section => {
   //Make new Image
   let image = null;
   let displacementImage = null;
-  // let rgbFilter = new PIXI.filters.RGBSplitFilter([10,0], [0,10], [-5,-5]);
+  let rgbFilter = new PIXI.filters.RGBSplitFilter([0, 0], [0, 0], [0, 0]);
 
   //Make new loader
   const loader = new PIXI.loaders.Loader();
 
   //Load images
   loader.add('image', originalImgSrc);
-  loader.add('displacement', './assets/displacement3.jpg');
+  loader.add('displacement', './assets/displacement1.jpg');
 
   loader.load((loader, resources) => {
     //Once image loaded do this
@@ -45,8 +45,8 @@ sections.forEach(section => {
 
     //Add filter to the image
     image.filters = [
-      new PIXI.filters.DisplacementFilter(displacementImage, 20),
-      // rgbFilter
+      new PIXI.filters.DisplacementFilter(displacementImage, 10),
+      rgbFilter
     ];
 
     //Add image to app
@@ -86,6 +86,9 @@ sections.forEach(section => {
     if(displacementImage) {
       displacementImage.x = currentX;
       displacementImage.y = currentY;
+
+      rgbFilter.red = [diffX*0.025, 0];
+      rgbFilter.green = [0, diffY*0.025];
     }
 
     requestAnimationFrame(animate);
