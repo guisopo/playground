@@ -16,6 +16,9 @@ sections.forEach(section => {
   //Add pixi app to each section
   section.appendChild(app.view);
 
+  //Make new Image
+  let image = null;
+
   //Make new loader
   const loader = new PIXI.loaders.Loader();
 
@@ -23,14 +26,14 @@ sections.forEach(section => {
   loader.add('image', originalImgSrc);
   loader.load((loader, resources) => {
     //Once image loaded do this
-    const image = new PIXI.Sprite(resources.image.texture);
+    image = new PIXI.Sprite(resources.image.texture);
 
     image.x = 100;
     image.y = 100;
     image.width = 900;
     image.height = 600;
     image.interactive = true;
-    
+
     //Add image to app
     app.stage.addChild(image);
   })
