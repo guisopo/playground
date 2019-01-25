@@ -26,26 +26,31 @@ sections.forEach(section => {
 
   //Load images
   loader.add('image', originalImgSrc);
-  loader.add('displacement', './assets/displacement1.jpg');
+  loader.add('displacement', './assets/displacement14.jpg');
 
   loader.load((loader, resources) => {
     //Once image loaded do this
     image = new PIXI.Sprite(resources.image.texture);
     displacementImage = new PIXI.Sprite(resources.displacement.texture);
 
-    image.x = 100;
-    image.y = 100;
+    image.x = 100 + 450
+    image.y = 100 + 300
     image.width = 900;
     image.height = 600;
     image.interactive = true;
 
-    displacementImage.width = 500;
-    displacementImage.height = 500;
+    image.anchor.x = 0.5
+    image.anchor.y = 0.5
+
+    displacementImage.width = 900;
+    displacementImage.height = 600;
+    displacementImage.anchor.x = 0.75;
+    displacementImage.anchor.y = 0.6;
     displacementImage.texture.baseTexture.wrapMode = PIXI.WRAP_MODES.REPEAT;
 
     //Add filter to the image
     image.filters = [
-      new PIXI.filters.DisplacementFilter(displacementImage, 10),
+      new PIXI.filters.DisplacementFilter(displacementImage, 30),
       rgbFilter
     ];
 
@@ -55,8 +60,8 @@ sections.forEach(section => {
 
     //Add ticker
     app.ticker.add(() => {
-      // displacementImage.x = displacementImage.x + 1;
-      // displacementImage.y = displacementImage.y + 1;
+      displacementImage.x = displacementImage.x + 1;
+      displacementImage.y = displacementImage.y + 1;
       // displacementImage.rotation += 0.001; 0
     });
   });
@@ -79,16 +84,16 @@ sections.forEach(section => {
     const diffX = aimX - currentX;
     const diffY = aimY - currentY;
     //ease current X
-    currentX = currentX + diffX * 0.015;
-    currentY = currentY + diffY * 0.015;
+    currentX = currentX + diffX * 0.15;
+    currentY = currentY + diffY * 0.15;
 
     //if there is displacement image, move it
     if(displacementImage) {
       displacementImage.x = currentX;
       displacementImage.y = currentY;
 
-      rgbFilter.red = [diffX*0.025, 0];
-      rgbFilter.green = [0, diffY*0.025];
+      // rgbFilter.red = [diffX*0.025, 0];
+      // rgbFilter.green = [0, diffY*0.025];
     }
 
     requestAnimationFrame(animate);
