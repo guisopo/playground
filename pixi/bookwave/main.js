@@ -8,7 +8,7 @@ sections.forEach(section => {
 
   //Set up pixi application
   const app = new PIXI.Application({
-    width: 1100,
+    width: 650,
     height: 800,
     transparent: true
   });
@@ -18,7 +18,9 @@ sections.forEach(section => {
 
   //Make new Image
   let image = null;
+  let image2 = null;
   let displacementImage = null;
+  let displacementImage2 = null;
   let rgbFilter = new PIXI.filters.RGBSplitFilter([0, 0], [0, 0], [0, 0]);
 
   //Make new loader
@@ -26,26 +28,44 @@ sections.forEach(section => {
 
   //Load images
   loader.add('image', originalImgSrc);
-  loader.add('displacement', './assets/displacement14.jpg');
+  loader.add('image2', './assets/displacement16.jpg');
+  loader.add('displacement', './assets/displacement16.jpg');
+  loader.add('displacement2', './assets/displacement15.jpg');
 
   loader.load((loader, resources) => {
     //Once image loaded do this
     image = new PIXI.Sprite(resources.image.texture);
+    image2 = new PIXI.Sprite(resources.image2.texture);
+    
     displacementImage = new PIXI.Sprite(resources.displacement.texture);
+    displacementImage2 = new PIXI.Sprite(resources.displacement2.texture);
 
-    image.x = 100 + 450
-    image.y = 100 + 300
-    image.width = 900;
-    image.height = 600;
+    image.width = 650;
+    image.height = 800;
+    image.x = 0;
+    image.y = 0;
+    image.rotation = 0.6;
     image.interactive = true;
 
-    image.anchor.x = 0.5
-    image.anchor.y = 0.5
+    image.anchor.x = 0.5;
+    image.anchor.y = 0.4;
 
-    displacementImage.width = 900;
-    displacementImage.height = 600;
-    displacementImage.anchor.x = 0.75;
-    displacementImage.anchor.y = 0.6;
+    image2.width = 650;
+    image2.height = 800;
+    image2.x = 325;
+    image2.y = 400;
+    image2.interactive = true;
+    image2.blendMode = PIXI.BLEND_MODES.MULTIPLY;
+
+    image2.anchor.x = 0.5;
+    image2.anchor.y = 0.5;
+
+    displacementImage.width = 650;
+    displacementImage.height = 800;
+    displacementImage.x = 325;
+    displacementImage.y = 400;
+    displacementImage.anchor.x = 0.5
+    displacementImage.anchor.y = 0.5
     displacementImage.texture.baseTexture.wrapMode = PIXI.WRAP_MODES.REPEAT;
 
     //Add filter to the image
@@ -56,12 +76,17 @@ sections.forEach(section => {
 
     //Add image to app
     app.stage.addChild(image);
+    app.stage.addChild(image2);
     app.stage.addChild(displacementImage);
 
     //Add ticker
     app.ticker.add(() => {
-      displacementImage.x = displacementImage.x + 1;
-      displacementImage.y = displacementImage.y + 1;
+      image.x = image.x + 1;
+      image.y = image.y + 1;
+      if (image.y > 1110)  {
+        image.y = -200;
+        image.x = -200;
+      };
       // displacementImage.rotation += 0.001; 0
     });
   });
@@ -73,8 +98,8 @@ sections.forEach(section => {
 
   //Listen mouse movement
   section.addEventListener('mousemove', (event) => {
-    aimX = event.pageX;
-    aimY = event.pageY;
+    // displacementImage.x = event.pageX;
+    // aimY = event.pageY;
     // displacementImage.y = event.pageY;
   });
 
@@ -100,6 +125,6 @@ sections.forEach(section => {
   }
 
   //Load animation
-  animate();
+  // animate();
 
 });
