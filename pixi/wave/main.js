@@ -7,6 +7,8 @@ class ImageLoad {
     this.app = new PIXI.Application(this.width, this.height, {transparent: true});    
     this.wrapper.appendChild(this.app.view);
     this.src = wrapper.dataset.src;
+    this.mouseOn = false;
+    this.animated =false;
 
     this.container = new PIXI.Container();
     this.app.stage.addChild(this.container);
@@ -44,18 +46,37 @@ class ImageLoad {
 
     this.container.filters = [this.displacementFilter];
     this.click();
-
+    this.hover();
   }
 
   click() {
     this.wrapper.addEventListener('click', () => {
-      let tl = new TimelineMax();
+      let tl = new TimelineMax({onComplete:() => this.animated = true});
       tl.to(this.displacementFilter.scale, 1, {x: 1, y: 1});
     });
   }
 
   hover() {
+    this.wrapper.addEventListener('mouseenter', () => {
+      if(this.animated && !this.mouseOn) { 
+        this.mouseOn = true;
+        TweenMax.ticker.addEventListener('tick', this.doWaves, this);
+        let tl = new TimelineMax();
+        tl.to(this.displacementFilter.scale, 0.5, {x: 7, y: 7});
+      }
+    });
+    this.wrapper.addEventListener('mouseleave', () => {
+      if(this.animated && this.mouseOn) { 
+        this.mouseOn = false;
+        TweenMax.ticker.removeEventListener('tick', this.doWaves, this);
+        let tl = new TimelineMax();
+        tl.to(this.displacementFilter.scale, 0.5, {x: 1, y: 1});
+      }
+    });
+  }
 
+  doWaves() {
+    this.displacementSprite.x += 1;
   }
 }
 
