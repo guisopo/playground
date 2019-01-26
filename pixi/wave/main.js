@@ -77,10 +77,6 @@ class ImageLoad {
 
 const loadImages = document.querySelectorAll('.js-loadme');
 
-// loadImages.forEach((image) => {
-//   let img = new ImageLoad(image);
-// })
-
 const targets = document.body.querySelectorAll('.js-loadme');
 
 const options = {
