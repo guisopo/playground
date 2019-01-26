@@ -32,7 +32,7 @@ class ImageLoad {
     this.bg.position.y =  0;
     this.container.addChild(this.bg);
 
-    this.displacementSprite = PIXI.Sprite.fromImage('assets/displacement9.jpg');
+    this.displacementSprite = PIXI.Sprite.fromImage('assets/displacement7.jpg');
     this.displacementSprite.texture.baseTexture.wrapMode = PIXI.WRAP_MODES.REPEAT;
 
     this.displacementFilter = new PIXI.filters.DisplacementFilter(
@@ -57,7 +57,7 @@ class ImageLoad {
         this.mouseOn = true;
         TweenMax.ticker.addEventListener('tick', this.doWaves, this);
         let tl = new TimelineMax();
-        tl.to(this.displacementFilter.scale, 0.5, {x: 7, y: 7});
+        tl.to(this.displacementFilter.scale, 0.5, {x: 25, y: 25});
       }
     });
     this.wrapper.addEventListener('mouseleave', () => {
@@ -77,7 +77,26 @@ class ImageLoad {
 
 const loadImages = document.querySelectorAll('.js-loadme');
 
-loadImages.forEach((image) => {
-  let img = new ImageLoad(image);
-})
+// loadImages.forEach((image) => {
+//   let img = new ImageLoad(image);
+// })
 
+const targets = document.body.querySelectorAll('.js-loadme');
+
+const options = {
+  rootMargin: '0px',
+  threshold: [0, 0.25, 0.5, 0.75, 1]
+}
+
+const observer = new IntersectionObserver(items => {
+  items.forEach(el => {
+    if(el.isIntersecting && el.intersectionRatio > 0.25) {
+      if(!el.target.classList.contains('is-init')) {
+        el.target.classList.add('is-init');
+        new ImageLoad(el.target);
+      }
+    }
+  });
+}, options);
+
+targets.forEach(target => observer.observe(target) );
