@@ -1,130 +1,79 @@
-const sections = document.querySelectorAll('section');
-
-sections.forEach(section => {
-  const originalImg = section.querySelector('img');
-  const originalImgSrc = originalImg.getAttribute('src');
-
-  section.innerHTML = '';
-
-  //Set up pixi application
-  const app = new PIXI.Application({
-    width: 650,
-    height: 800,
-    transparent: true
-  });
-
-  //Add pixi app to each section
-  section.appendChild(app.view);
-
-  //Make new Image
-  let image = null;
-  let image2 = null;
-  let displacementImage = null;
-  let displacementImage2 = null;
-  let rgbFilter = new PIXI.filters.RGBSplitFilter([0, 0], [0, 0], [0, 0]);
-
-  //Make new loader
-  const loader = new PIXI.loaders.Loader();
-
-  //Load images
-  loader.add('image', originalImgSrc);
-  loader.add('image2', './assets/displacement16.jpg');
-  loader.add('displacement', './assets/displacement16.jpg');
-  loader.add('displacement2', './assets/displacement15.jpg');
-
-  loader.load((loader, resources) => {
-    //Once image loaded do this
-    image = new PIXI.Sprite(resources.image.texture);
-    image2 = new PIXI.Sprite(resources.image2.texture);
+class ImageLoad {
+  constructor(wrapper) {
+    this.wrapper = wrapper;
+    this.width = wrapper.getBoundingClientRect().width;
+    this.height = wrapper.getBoundingClientRect().height;
     
-    displacementImage = new PIXI.Sprite(resources.displacement.texture);
-    displacementImage2 = new PIXI.Sprite(resources.displacement2.texture);
+    //Set up pixi application
+    this.app = new PIXI.Application({width: this.width, height: this.height,transparent: true});  
+    //Add pixi app to section
+    this.wrapper.appendChild(this.app.view);
+    this.src = wrapper.dataset.src;
+    
+    this.mouseOn = false;
+    this.animated =false;
 
-    image.width = 650;
-    image.height = 800;
-    image.x = 0;
-    image.y = 0;
-    image.rotation = 0.6;
-    image.interactive = true;
+    this.container = new PIXI.Container();
+    this.app.stage.addChild(this.container);
 
-    image.anchor.x = 0.5;
-    image.anchor.y = 0.4;
-
-    image2.width = 650;
-    image2.height = 800;
-    image2.x = 325;
-    image2.y = 400;
-    image2.interactive = true;
-    image2.blendMode = PIXI.BLEND_MODES.MULTIPLY;
-
-    image2.anchor.x = 0.5;
-    image2.anchor.y = 0.5;
-
-    displacementImage.width = 650;
-    displacementImage.height = 800;
-    displacementImage.x = 325;
-    displacementImage.y = 400;
-    displacementImage.anchor.x = 0.5
-    displacementImage.anchor.y = 0.5
-    displacementImage.texture.baseTexture.wrapMode = PIXI.WRAP_MODES.REPEAT;
-
-    //Add filter to the image
-    image.filters = [
-      new PIXI.filters.DisplacementFilter(displacementImage, 30),
-      rgbFilter
-    ];
-
-    //Add image to app
-    app.stage.addChild(image);
-    app.stage.addChild(image2);
-    app.stage.addChild(displacementImage);
-
-    //Add ticker
-    app.ticker.add(() => {
-      image.x = image.x + 1;
-      image.y = image.y + 1;
-      if (image.y > 1110)  {
-        image.y = -200;
-        image.x = -200;
-      };
-      // displacementImage.rotation += 0.001; 0
-    });
-  });
-
-  let currentX = 0;
-  let aimX =  0;
-  let currentY = 0;
-  let aimY =  0;
-
-  //Listen mouse movement
-  section.addEventListener('mousemove', (event) => {
-    // displacementImage.x = event.pageX;
-    // aimY = event.pageY;
-    // displacementImage.y = event.pageY;
-  });
-
-  //Animate
-  const animate = function() {
-    //currentX should get towards aimX every frame
-    const diffX = aimX - currentX;
-    const diffY = aimY - currentY;
-    //ease current X
-    currentX = currentX + diffX * 0.15;
-    currentY = currentY + diffY * 0.15;
-
-    //if there is displacement image, move it
-    if(displacementImage) {
-      displacementImage.x = currentX;
-      displacementImage.y = currentY;
-
-      // rgbFilter.red = [diffX*0.025, 0];
-      // rgbFilter.green = [0, diffY*0.025];
-    }
-
-    requestAnimationFrame(animate);
+    this.load(this.startAnimation());
   }
 
-  //Load animation
-  // animate();
+  load(afterLoad) {
+    let tmpImg = new Image();
+    tmpImg.src = this.src;
+    tmpImg.onLoad = function() {
+      afterLoad();
+    }
+  }
 
-});
+  startAnimation() {
+    this.bg = PIXI.Sprite.fromImage(this.src);
+    this.bg.width = this.width;
+    this.bg.height = this.height;
+    this.bg.position.x =  0;
+    this.bg.position.y =  0;
+    this.container.addChild(this.bg);
+
+    this.displacementSprite = new PIXI.Sprite.fromImage('assets/displacement-3.jpg');
+    this.displacementSprite.texture.baseTexture.wrapMode = PIXI.WRAP_MODES.REPEAT;
+    //Add filter to the image
+    this.displacementFilter = new PIXI.filters.DisplacementFilter( this.displacementSprite, 1 );
+
+    this.displacementSprite.scale.set(0.4);
+    //Add image to app
+    this.app.stage.addChild(this.displacementSprite);
+
+    this.container.filters = [this.displacementFilter];
+
+    let tl = new TimelineMax({onComplete:() => this.animated = true});
+    tl.to(this.displacementFilter.scale, 1, {x: 1, y: 1});
+    this.hover();
+  }
+
+  hover() {
+    this.wrapper.addEventListener('mouseenter', () => {
+      if(this.animated && !this.mouseOn) { 
+        this.mouseOn = true;
+        TweenMax.ticker.addEventListener('tick', this.doWaves, this);
+        let tl = new TimelineMax();
+        tl.to(this.displacementFilter.scale, 0.5, {x: 25, y: 5});
+      }
+    });
+    this.wrapper.addEventListener('mouseleave', () => {
+      if(this.animated && this.mouseOn) { 
+        this.mouseOn = false;
+        TweenMax.ticker.removeEventListener('tick', this.doWaves, this);
+        let tl = new TimelineMax();
+        tl.to(this.displacementFilter.scale, 0.5, {x: 1, y: 1});
+      }
+    });
+  }
+
+  doWaves() {
+    this.displacementSprite.x += 1;
+  }
+}
+
+const loadImage = document.querySelector('.js-loadme');
+new ImageLoad(loadImage);
