@@ -38,9 +38,9 @@ class ImageLoad {
     this.displacementSprite = new PIXI.Sprite.fromImage('assets/displacement-3.jpg');
     this.displacementSprite.texture.baseTexture.wrapMode = PIXI.WRAP_MODES.REPEAT;
     //Add filter to the image
-    this.displacementFilter = new PIXI.filters.DisplacementFilter( this.displacementSprite, 1 );
+    this.displacementFilter = new PIXI.filters.DisplacementFilter( this.displacementSprite, 100 );
 
-    this.displacementSprite.scale.set(0.4);
+    this.displacementSprite.scale.set(0.25);
     //Add image to app
     this.app.stage.addChild(this.displacementSprite);
 
@@ -71,7 +71,10 @@ class ImageLoad {
   }
 
   doWaves() {
-    this.displacementSprite.x += 1;
+    this.bg.x += 2;
+    if(this.bg.position.x > this.bg.width) {
+      this.bg.position.x = -this.bg.width;
+    }
   }
 }
 
