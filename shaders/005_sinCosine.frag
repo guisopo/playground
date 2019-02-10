@@ -16,8 +16,8 @@ void main() {
   float circleRadius = 0.1;
   float speed = 2.0;
   float radius = 0.5;
-  
-  vec2 translate = vec2(sin(u_time * speed) * radius, cos(u_time * speed) * radius * 0.25);;
+
+  vec2 translate = vec2(sin(u_time * speed) * radius, cos(u_time * speed) * radius);;
   coord += translate * 0.5;
 
   color += vec3(circleShape(coord, circleRadius));
