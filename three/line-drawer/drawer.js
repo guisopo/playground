@@ -116,3 +116,9 @@ document.addEventListener('touchstart', function() {
 document.addEventListener('touchend', function() {
   isMouseDown = false;
 });
+
+window.addEventListener('resize', function() {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
