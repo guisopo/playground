@@ -34,6 +34,9 @@ const animate = function() {
 
   requestAnimationFrame(animate);
 
+  // Move the camera towards the shapes
+  camera.position.setZ(camera.position.z + 1);
+
   //Rotate shapes each frame
   shapes.forEach(shape => {
     shape.rotateX(0.01);
@@ -47,7 +50,7 @@ animate();
 let hue = 0;
 
 // 7. Create Shapes
-const createShape = function(x, y, z) {
+const createShape = function(x, y) {
   const geometries = [
     new THREE.ConeGeometry(10, 20, 30),
     new THREE.BoxGeometry(15, 15, 15),
@@ -66,8 +69,12 @@ const createShape = function(x, y, z) {
 
   const shape = new THREE.Mesh(geometry, material);
 
-  //Set Shape's Position
-  shape.position.set( (window.innerWidth / 2) - x, (window.innerHeight / 2) - y, z);
+  //Set Shape's Position & Set the shape where the camera currently is + 500
+  shape.position.set( 
+    (window.innerWidth / 2) - x, 
+    (window.innerHeight / 2) - y, 
+    camera.position.z + 500
+  );
 
   // Lets add it to the Shapes Array and to the Scene
   shapes.push(shape);
@@ -82,7 +89,7 @@ let isMouseDown = false;
 
 document.addEventListener('mousemove', function(event) {
   if(isMouseDown) {
-    createShape(event.pageX, event.pageY, 300);
+    createShape(event.pageX, event.pageY);
   }
 });
 
@@ -97,7 +104,7 @@ document.addEventListener('mouseup', function() {
 // 9. Touch Events
 document.addEventListener('touchmove', function(event) {
   if(isMouseDown) {
-    createShape(event.pageX, event.pageY, 300);
+    createShape(event.pageX, event.pageY);
   }
 });
 
