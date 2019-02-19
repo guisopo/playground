@@ -31,6 +31,7 @@ const shapes = [];
 // 6. Add the animation loop
 const animate = function() {
   renderer.render(scene, camera);
+
   requestAnimationFrame(animate);
 
   //Rotate shapes each frame
@@ -42,13 +43,27 @@ const animate = function() {
 
 animate();
 
+// Hold a state for HUE. Updated later in createShape()
+let hue = 0;
+
 // 7. Create Shapes
 const createShape = function(x, y, z) {
-  const geometry = new THREE.ConeGeometry(10, 10, 32);
+  const geometries = [
+    new THREE.ConeGeometry(10, 20, 30),
+    new THREE.BoxGeometry(15, 15, 15),
+    new THREE.TorusGeometry(5, 3, 16, 100)
+  ];
+  
+  const randomNumber = Math.floor(Math.random() * geometries.length);
+  const geometry = geometries[randomNumber];
+
+  const emissiveColor = new THREE.Color(`hsl(${hue}, 100%, 50%)`);
+
   const material = new THREE.MeshLambertMaterial({
     color: 0xffffff,
-    emissive: 0xff0000,
+    emissive: emissiveColor,
   });
+
   const shape = new THREE.Mesh(geometry, material);
 
   //Set Shape's Position
@@ -56,8 +71,9 @@ const createShape = function(x, y, z) {
 
   // Lets add it to the Shapes Array and to the Scene
   shapes.push(shape);
-
   scene.add(shape);
+
+  hue = hue + 1;
 }
 
 
@@ -72,9 +88,24 @@ document.addEventListener('mousemove', function(event) {
 
 document.addEventListener('mousedown', function() {
   isMouseDown = true;
-  console.log(isMouseDown);
 });
 
 document.addEventListener('mouseup', function() {
+  isMouseDown = false;
+});
+
+// 9. Touch Events
+document.addEventListener('touchmove', function(event) {
+  if(isMouseDown) {
+    createShape(event.pageX, event.pageY, 300);
+  }
+});
+
+document.addEventListener('touchstart', function() {
+  isMouseDown = true;
+  console.log(isMouseDown);
+});
+
+document.addEventListener('touchend', function() {
   isMouseDown = false;
 });
