@@ -18,11 +18,11 @@ const ambientLight = new THREE.AmbientLight(0x333333);
 scene.add(ambientLight);
 
 const pointLight = new THREE.PointLight(0xffffff, 1, 0);
-pointLight.position.set(500, 500, -2000);
+pointLight.position.set(1000, 500, -2000);
 scene.add(pointLight);
 
 // CAMERA
-const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 500000);
+const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, -1000);
 camera.position.z = -3000;
 
 // LOADER
