@@ -123,3 +123,8 @@ window.addEventListener('resize', function() {
   
 //   earth.rotation.set(0, scrollPosition, 0);
 // });
+
+document.addEventListener('mousemove', function(event) {
+  camera.position.x = ((window.innerWidth / 2) - event.pageX) * 2;
+  camera.position.y = ((window.innerHeight / 2) - event.pageY) * 2;
+});

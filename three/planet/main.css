@@ -4,11 +4,11 @@
 } 
 
 html, body {
-  /* position: fixed; */
+  position: fixed;
 }
 
 body {
-  height: 4000px;
+  /* height: 4000px; */
 }
 
 section {
