@@ -51,8 +51,10 @@ const animate = function() {
   camera.lookAt(scene.position);
 
   // rotate planet
-  earth.rotateY(0.00075);
-  earth.rotateX(-0.00025);
+  // if (!scrolling ) {
+  //   earth.rotateY(0.00075);
+  //   earth.rotateX(-0.00025);
+  // }
 
   renderer.render(scene, camera);
 
@@ -67,4 +69,10 @@ window.addEventListener('resize', function() {
   camera.updateProjectionMatrix();
 
   renderer.setSize(window.innerWidth, window.innerHeight);
-})
+});
+
+document.addEventListener('scroll', function() {
+  const scrollPosition = window.pageYOffset/500;
+  
+  earth.rotation.set(0, posY + scrollPosition, 0);
+});

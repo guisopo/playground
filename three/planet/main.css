@@ -4,6 +4,14 @@
 } 
 
 html, body {
+  /* position: fixed; */
+}
+
+body {
+  height: 4000px;
+}
+
+section {
   position: fixed;
 }
 
