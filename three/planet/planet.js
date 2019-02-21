@@ -46,6 +46,25 @@ const makePlanet = function() {
 
 const earth = makePlanet();
 
+// MOON GENERATOR
+const makeMoon = function() {
+  const texture = loader.load('assets/wilson-skin.png');
+  const geometry = new THREE.SphereGeometry(100, 64, 64);
+  const material = new THREE.MeshLambertMaterial({
+    map: texture
+  });
+
+  const mesh = new THREE.Mesh(geometry, material);
+  scene.add(mesh);
+
+  return mesh;
+}
+
+const moon = makeMoon();
+const moonGroup = new THREE.Group();
+moonGroup.add(moon);
+scene.add(moonGroup);
+moon.translateX(-1500);
 
 // RING GENERATOR
 const makeRing = function(width, color) {
@@ -73,8 +92,11 @@ const animate = function() {
   camera.lookAt(scene.position);
 
   // rotate planet
-  earth.rotateY(0.003);
-  earth.rotateX(-0.00075);
+  earth.rotateY(0.03);
+  earth.rotateZ(-0.005);
+
+  // rotate moon
+  moonGroup.rotateY(0.01);
 
   // rotate ring
   ring1.geometry.rotateY(0.004);
