@@ -28,17 +28,17 @@ camera.position.z = -3000;
 // LOADER
 const loader = new THREE.TextureLoader();
 
-// PLANET CREATION
-function makePlanet() {
+// PLANET GENERATOR
+const makePlanet = function() {
   // const texture = loader.load('assets/wilson-skin.png');
-  const texture = loader.load('assets/earth.jpg');
+  const texture = loader.load('assets/wilson-skin.png');
   const geometry = new THREE.SphereGeometry(800, 128, 128);
   const material = new THREE.MeshLambertMaterial({
     // color: 0x2727e6,
     map: texture
   });
 
-  const mesh = new THREE.Mesh( geometry, material );
+  const mesh = new THREE.Mesh(geometry, material);
   scene.add(mesh);
 
   return mesh;
@@ -46,15 +46,40 @@ function makePlanet() {
 
 const earth = makePlanet();
 
+
+// RING GENERATOR
+const makeRing = function(width, color) {
+  const geometry = new THREE.TorusGeometry(width, 5, 16, 100);
+  const material = new THREE.MeshBasicMaterial({
+    color: color
+  });
+
+  const mesh = new THREE.Mesh(geometry, material);
+
+  mesh.geometry.rotateX(Math.PI / 2);
+  mesh.geometry.rotateZ(Math.PI / 10);
+
+  scene.add(mesh);
+
+  return mesh;
+}
+
+const ring1 = makeRing(1100, 0xff4141);
+const ring2 = makeRing(1200, 0xffffff);
+const ring3 = makeRing(1300, 0xffdb00);
+
 // ANIMATION
 const animate = function() {
   camera.lookAt(scene.position);
 
   // rotate planet
-  // if (!scrolling ) {
-  //   earth.rotateY(0.00075);
-  //   earth.rotateX(-0.00025);
-  // }
+  earth.rotateY(0.003);
+  earth.rotateX(-0.00075);
+
+  // rotate ring
+  ring1.geometry.rotateY(0.004);
+  ring2.geometry.rotateY(-0.002);
+  ring3.geometry.rotateY(0.003);
 
   renderer.render(scene, camera);
 
@@ -71,8 +96,8 @@ window.addEventListener('resize', function() {
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
-document.addEventListener('scroll', function() {
-  const scrollPosition = window.pageYOffset/500;
+// document.addEventListener('scroll', function() {
+//   const scrollPosition = window.pageYOffset/500;
   
-  earth.rotation.set(0, posY + scrollPosition, 0);
-});
+//   earth.rotation.set(0, scrollPosition, 0);
+// });
