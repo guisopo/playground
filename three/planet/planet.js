@@ -66,6 +66,14 @@ moonGroup.add(moon);
 scene.add(moonGroup);
 moon.translateX(-1500);
 
+// HOLD CAMERA POSITIONS
+
+let currentX = 0;
+let currentY = 0;
+let aimX = 0;
+let aimY = 0;
+
+
 // RING GENERATOR
 const makeRing = function(width, color) {
   const geometry = new THREE.TorusGeometry(width, 5, 16, 100);
@@ -89,11 +97,22 @@ const ring3 = makeRing(1300, 0xffdb00);
 
 // ANIMATION
 const animate = function() {
+  // start tweening
+  const diffX = aimX - currentX;
+  const diffY = aimY - currentY;
+
+  currentX = currentX + diffX * 0.05;
+  currentY = currentY + diffY * 0.05;
+
+  camera.position.x = currentX;
+  camera.position.y = currentY;
+  // end tweening
+
   camera.lookAt(scene.position);
 
   // rotate planet
-  earth.rotateY(0.03);
-  earth.rotateZ(-0.005);
+  earth.rotateY(0.01);
+  earth.rotateZ(-0.002);
 
   // rotate moon
   moonGroup.rotateY(0.01);
@@ -125,6 +144,11 @@ window.addEventListener('resize', function() {
 // });
 
 document.addEventListener('mousemove', function(event) {
-  camera.position.x = ((window.innerWidth / 2) - event.pageX) * 2;
-  camera.position.y = ((window.innerHeight / 2) - event.pageY) * 2;
+  aimX = ((window.innerWidth / 2) - event.pageX) * 2;
+  aimY = ((window.innerHeight / 2) - event.pageY) * 2;
+});
+
+document.addEventListener('touchmove', function(event) {
+  aimX = ((window.innerWidth / 2) - event.pageX) * 2;
+  aimY = ((window.innerHeight / 2) - event.pageY) * 2;
 });
