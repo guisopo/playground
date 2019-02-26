@@ -46,6 +46,33 @@ const makePlanet = function() {
 
 const earth = makePlanet();
 
+// STARS GENERATOR
+const makeStar = function() {
+  const geometry = new THREE.Geometry();
+
+  for(let i = 0; i < 5000; i++) {
+    const point = new THREE.Vector3(
+      2000 * Math.random(),
+      2000 * Math.random(),
+      2000 * Math.random(),
+    );
+
+    geometry.vertices.push(point);
+  };
+
+  const material = new THREE.PointsMaterial({
+    color: 0xffffff
+  });
+
+  const points = new THREE.Points(geometry, material);
+
+  scene.add(points);
+
+  return points;
+}
+
+const stars = makeStar();
+
 // MOON GENERATOR
 const makeMoon = function() {
   const texture = loader.load('assets/wilson-skin.png');
