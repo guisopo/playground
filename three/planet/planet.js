@@ -12,6 +12,7 @@ section.appendChild(renderer.domElement);
 
 // SCENE
 const scene = new THREE.Scene();
+scene.fog = new THREE.FogExp2(0x000000, 0.00027);
 
 // LIGHT
 const ambientLight = new THREE.AmbientLight(0x333333);
@@ -51,10 +52,10 @@ const makeStar = function() {
   const texture = loader.load('assets/particle.png');
   const geometry = new THREE.Geometry();
 
-  for(let i = 0; i < 5000; i++) {
+  for(let i = 0; i < 2000; i++) {
     const point = new THREE.Vector3();
     const sphericalPoint = new THREE.Spherical(
-      900 + Math.random() * 200,
+      900 + Math.random() * 900,
       2 * Math.PI * Math.random(),
       Math.PI * Math.random()
     );
