@@ -48,6 +48,7 @@ const earth = makePlanet();
 
 // STARS GENERATOR
 const makeStar = function() {
+  const texture = loader.load('assets/particle.png');
   const geometry = new THREE.Geometry();
 
   for(let i = 0; i < 5000; i++) {
@@ -64,8 +65,12 @@ const makeStar = function() {
   };
 
   const material = new THREE.PointsMaterial({
-    color: 0xffffff,
-    size: 5
+    size: 50,
+    map: texture,
+    transparent: true,
+    blending: THREE.AdditiveBlending,
+    depthTest: true,
+    depthWrite: false
   });
 
   const points = new THREE.Points(geometry, material);
