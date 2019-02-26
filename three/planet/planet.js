@@ -48,11 +48,11 @@ const makePlanet = function() {
 const earth = makePlanet();
 
 // STARS GENERATOR
-const makeStar = function() {
-  const texture = loader.load('assets/particle.png');
+const makeStar = function(url, maxNum) {
+  const texture = loader.load(url);
   const geometry = new THREE.Geometry();
 
-  for(let i = 0; i < 2000; i++) {
+  for(let i = 0; i < maxNum; i++) {
     const point = new THREE.Vector3();
     const sphericalPoint = new THREE.Spherical(
       900 + Math.random() * 900,
@@ -81,7 +81,7 @@ const makeStar = function() {
   return points;
 }
 
-const stars = makeStar();
+const stars = makeStar('assets/particle.png', 1000);
 
 // MOON GENERATOR
 const makeMoon = function() {
