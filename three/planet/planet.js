@@ -51,17 +51,21 @@ const makeStar = function() {
   const geometry = new THREE.Geometry();
 
   for(let i = 0; i < 5000; i++) {
-    const point = new THREE.Vector3(
-      2000 * Math.random(),
-      2000 * Math.random(),
-      2000 * Math.random(),
+    const point = new THREE.Vector3();
+    const sphericalPoint = new THREE.Spherical(
+      900 + Math.random() * 200,
+      2 * Math.PI * Math.random(),
+      Math.PI * Math.random()
     );
+
+    point.setFromSpherical(sphericalPoint);
 
     geometry.vertices.push(point);
   };
 
   const material = new THREE.PointsMaterial({
-    color: 0xffffff
+    color: 0xffffff,
+    size: 5
   });
 
   const points = new THREE.Points(geometry, material);
