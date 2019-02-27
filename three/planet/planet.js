@@ -162,8 +162,14 @@ const animate = function() {
   currentX = currentX + diffX * 0.05;
   currentY = currentY + diffY * 0.05;
 
-  camera.position.x = currentX;
-  camera.position.y = currentY;
+  const sphere = new THREE.Spherical(
+    3000,
+    currentY * 0.001 - Math.PI / 2,
+    currentX * 0.001
+  );
+  camera.position.setFromSpherical(sphere);
+  // camera.position.x = currentX;
+  // camera.position.y = currentY;
   // end tweening
 
   camera.lookAt(scene.position);
