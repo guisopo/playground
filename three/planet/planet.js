@@ -83,6 +83,27 @@ const makeStar = function(url, maxNum) {
 
 const stars = makeStar('assets/particle.png', 1000);
 
+// LINE GENERATOR
+const makeLine = function() {
+  const path = new THREE.QuadraticBezierCurve3(
+    new THREE.Vector3(800, 0, 0),
+    new THREE.Vector3(1200, 0, -1200),
+    new THREE.Vector3(0, 0, -800)
+  );
+
+  const geometry = new THREE.TubeGeometry(path, 50, 8, 20, false);
+  const material = new THREE.MeshBasicMaterial({
+    color: 0xff0000,
+  });
+
+  const mesh = new THREE.Mesh(geometry, material);
+  scene.add(mesh);
+
+  return mesh
+}
+
+const line = makeLine();
+
 // MOON GENERATOR
 const makeMoon = function() {
   const texture = loader.load('assets/wilson-skin.png');
@@ -150,7 +171,9 @@ const animate = function() {
   // rotate planet
   earth.rotateY(0.01);
   earth.rotateZ(-0.002);
-
+  line.rotateY(0.01);
+  line.rotateZ(-0.002);
+  
   // rotate moon
   moonGroup.rotateY(0.01);
 
