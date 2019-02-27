@@ -102,7 +102,7 @@ const makeLine = function() {
   return mesh
 }
 
-const line = makeLine();
+// const line = makeLine();
 
 // MOON GENERATOR
 const makeMoon = function() {
@@ -171,8 +171,9 @@ const animate = function() {
   // rotate planet
   earth.rotateY(0.01);
   earth.rotateZ(-0.002);
-  line.rotateY(0.01);
-  line.rotateZ(-0.002);
+  // rotate line with earth
+  // line.rotateY(0.01);
+  // line.rotateZ(-0.002);
   
   // rotate moon
   moonGroup.rotateY(0.01);
@@ -190,6 +191,7 @@ const animate = function() {
 animate();
 
 // EVENT LISTENERS
+
 window.addEventListener('resize', function() {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
@@ -197,18 +199,38 @@ window.addEventListener('resize', function() {
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
-// document.addEventListener('scroll', function() {
-//   const scrollPosition = window.pageYOffset/500;
-  
-//   earth.rotation.set(0, scrollPosition, 0);
-// });
+let isMouseDown = false;
+let startX = 0;
+let startY = 0;
+
+document.addEventListener('mousedown', function(event) {
+  isMouseDown = true;
+  startX = event.pageX;
+  startY = event.pageY;
+});
+
+document.addEventListener('mouseup', function(event) {
+  isMouseDown = false;
+});
 
 document.addEventListener('mousemove', function(event) {
-  aimX = ((window.innerWidth / 2) - event.pageX) * 2;
-  aimY = ((window.innerHeight / 2) - event.pageY) * 2;
+  if(isMouseDown) {
+    // aimX = ((window.innerWidth / 2) - event.pageX) * 2;
+    // aimY = ((window.innerHeight / 2) - event.pageY) * 2;
+    aimX = aimX + (event.pageX - startX) * 3;
+    aimY = aimY + (event.pageY - startY) * 3;
+    startX = event.pageX;
+    startY = event.pageY;
+  }
 });
 
 document.addEventListener('touchmove', function(event) {
   aimX = ((window.innerWidth / 2) - event.pageX) * 2;
   aimY = ((window.innerHeight / 2) - event.pageY) * 2;
 });
+
+// document.addEventListener('scroll', function() {
+//   const scrollPosition = window.pageYOffset/500;
+  
+//   earth.rotation.set(0, scrollPosition, 0);
+// });
