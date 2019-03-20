@@ -17,20 +17,32 @@ const container = new PIXI.Container();
 app.stage.addChild(container);
 
 function init() {
-  let count = 0
+  let count = 0;
+
+  const textSentence = 'This is a PixiJS text';
 
   const textArguments = {
     fontFamily : 'Francois One', 
-    fontSize: 24, 
-    fill : 0x000000, 
+    fontSize: 108,
+    // fill : 0xf9ed00, 
+    // fill : 0xe80289, 
+    fill : 0x03aaea, 
     align : 'center'
   };
 
-  const text = new PIXI.Text('This is a PixiJS text', textArguments);
+  let letters = document.querySelectorAll('.letter');
+  let lettersArray = Array.from(letters);
 
-  container.addChild(text);
+  lettersArray.forEach( letter => {
+    const coords = letter.getBoundingClientRect();
+    const text = new PIXI.Text(letter.innerHTML, textArguments);
+    text.position.x = coords.x;
+    
+    container.addChild(text);
+  });
 
   app.ticker.add(function() {
     count++;
+    let mousePosition = app.renderer.plugins.interaction.mouse.global;
   });
 }
