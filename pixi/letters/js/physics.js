@@ -1,5 +1,5 @@
 class Physics {
-  constructor(x, y) {
+  constructor(x, y, power) {
     this.x = x || 0;
     this.y = y || 0;
 
@@ -8,11 +8,11 @@ class Physics {
     this.vx = 0;
     this.vy = 0;
     
-    this.friction = 0.7;
-    this.springFactor = 0.3;
+    this.friction = 0.9;
+    this.springFactor = 0.1;
     
-    this.power = 0.1;
-    this.maxSpeed = 1;
+    this.power = power || 0.1;
+    this.maxSpeed = 2;
     
     this.diffX = 0;
     this.diffY = 0;
@@ -29,10 +29,10 @@ class Physics {
 
     let dist = Math.sqrt(dx*dx + dy*dy);
     // interaction
-    if(dist<100) {
+    if(dist<200) {
       let angle = Math.atan2(dy,dx);
-      let tx = mouse.x + Math.cos(angle) * 100;
-      let ty = mouse.y + Math.sin(angle) * 100;
+      let tx = mouse.x + Math.cos(angle) * 200;
+      let ty = mouse.y + Math.sin(angle) * 200;
 
       this.vx += (tx - this.x) * -1;
       this.vy += (ty - this.y) * -1;
