@@ -30,19 +30,37 @@ function init() {
     align : 'center'
   };
 
-  let letters = document.querySelectorAll('.letter');
-  let lettersArray = Array.from(letters);
+  const elements = document.querySelectorAll('.letter');
+  const elementsArray = Array.from(elements);
 
-  lettersArray.forEach( letter => {
-    const coords = letter.getBoundingClientRect();
-    const text = new PIXI.Text(letter.innerHTML, textArguments);
+  let balls = [];
+  let letters = [];
+
+  elementsArray.forEach( element => {
+    const coords = element.getBoundingClientRect();
+
+    const temp = new PIXI.Container();
+    const text = new PIXI.Text(element.innerHTML, textArguments);
     text.position.x = coords.x;
+    temp.addChild(text);
     
-    container.addChild(text);
+    container.addChild(temp);
+
+    balls.push(
+      new Physics(coords.x + coords.width/2, coords.y + coords.height/2)
+    );
+    letters.push(temp);
   });
 
   app.ticker.add(function() {
     count++;
     let mousePosition = app.renderer.plugins.interaction.mouse.global;
+
+    balls.forEach((ball,j) => {
+      ball.think(mousePosition);
+
+      letters[j].position.x = ball.diffX;
+      letters[j].position.y = ball.diffY;
+    });
   });
 }
