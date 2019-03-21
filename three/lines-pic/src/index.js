@@ -7,6 +7,7 @@ const width = 600;
 const height = 600;
 const dots = 50;
 const lines = 50;
+const radius = 100;
 
 // RENDERER
 const renderer = new THREE.WebGLRenderer({
@@ -28,20 +29,22 @@ const material = new THREE.LineBasicMaterial( {
    color: 0xff0000
 } );
 
-const vector1 = new THREE.Vector3(-100, 0, 0);
-const vector2 = new THREE.Vector3(100, 0, 0);
-
-const geometry = new THREE.Geometry();
 
 for(let i=0; i<lines; i++) {
+  const geometry = new THREE.Geometry();
   const line = new THREE.Line(geometry, material);
 
-  geometry.vertices.push(vector1);
-  geometry.vertices.push(vector2);
+  for(let j=0; j<dots; j++) {
+    const coord = (j/dots) * radius*2 - radius; 
 
-  line.rotation.x = Math.random() *Math.PI;
-  line.rotation.y = Math.random() *Math.PI;
-  line.rotation.z = Math.random() *Math.PI;
+    const vector = new THREE.Vector3(coord, Math.random()*30, 0);
+
+    geometry.vertices.push(vector);
+  }
+
+  line.rotation.x = Math.random() * Math.PI;
+  line.rotation.y = Math.random() * Math.PI;
+  line.rotation.z = Math.random() * Math.PI;
 
   group.add(line);
 }
