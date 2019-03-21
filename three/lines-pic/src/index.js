@@ -1,9 +1,12 @@
 import "./main.scss";
 import * as THREE from 'three';
+const OrbitControls = require('three-orbit-controls')(THREE);
 
 const canvas = document.getElementById('myscene');
 const width = 600;
 const height = 600;
+const dots = 50;
+const lines = 50;
 
 // RENDERER
 const renderer = new THREE.WebGLRenderer({
