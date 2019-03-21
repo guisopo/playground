@@ -70,8 +70,3 @@ class Physics {
 
 
 }
-
-
-
-// WEBPACK FOOTER //
-// src/js/ball.js
