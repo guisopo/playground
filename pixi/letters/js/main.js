@@ -26,44 +26,45 @@ function init() {
   let letters = [];
 
   let layers = new Array(4).fill().map(x => new PIXI.Container());
-
+  layers[3].blendMode = 2;
   layers.forEach(layer => {
     container.addChild(layer);
   });
 
-  // layers[3].blendMode = 2;
+  function drawLetter(text,coords,color,balls,containers, power, layerStackNumber,fontsize,rotation) {
+    const temp = new PIXI.Container();
+
+    const textArguments = {
+      fontFamily : 'Francois One', 
+      fontSize: fontsize,
+      fill: color,
+      align : 'center'
+    };
+
+    const letter = new PIXI.Text(text, textArguments);
+
+    letter.position.x = coords.x;
+    letter.position.y = coords.y;
+
+    if(rotation) letter.rotation = rotation;
+  	if(layerStackNumber===3) letter.blendMode = 2;
+
+    temp.addChild(letter);
+    layers[layerStackNumber].addChild(temp);
+
+    balls.push(
+      new Physics(coords.x + coords.width/2, coords.y + coords.height/2, power)
+    );
+    containers.push(temp);
+  }
 
   elementsArray.forEach( element => {
     const coords = element.getBoundingClientRect();
 
-    function drawLetter(coords, color, balls, containers, power, layerNumber) {
-      const temp = new PIXI.Container();
-
-      const textArguments = {
-        fontFamily : 'Francois One', 
-        fontSize: 216,
-        fill: color,
-        align : 'center'
-      };
-
-      const text = new PIXI.Text(element.innerHTML, textArguments);
-
-      text.position.x = coords.x;
-      text.position.y = coords.y;
-      if(layerNumber === 3) text.blendMode = 2;
-      temp.addChild(text);
-      layers[layerNumber].addChild(temp);
-
-      balls.push(
-        new Physics(coords.x + coords.width/2, coords.y + coords.height/2, power)
-      );
-      containers.push(temp);
-    }
-
-    drawLetter(coords, 0x03aaea, balls, letters, 0.1, 0);
-    drawLetter(coords, 0xf9ed00, balls, letters, 0.14, 1);
-    drawLetter(coords, 0xe80289, balls, letters, 0.16, 2);
-    drawLetter(coords, 0x03aaea, balls, letters, 0.18, 3);
+    drawLetter(element.innerHTML, coords, 0x03aaea, balls, letters, 3, 0, 104);
+    drawLetter(element.innerHTML, coords, 0xf9ed00, balls, letters, 5, 1, 104);
+    drawLetter(element.innerHTML, coords, 0xe80289, balls, letters, 4, 2, 104);
+    drawLetter(element.innerHTML, coords, 0x03aaea, balls, letters, 3, 3, 104);
 
   });
 
