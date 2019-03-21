@@ -26,44 +26,43 @@ scene.add(group);
 
 // LINE INIT
 const material = new THREE.LineBasicMaterial( {
-   color: 0xff0000
+   color: 0x000000
 } );
 
 
-for(let i=0; i<lines; i++) {
-  const geometry = new THREE.Geometry();
-  const line = new THREE.Line(geometry, material);
+// for(let i=0; i<lines; i++) {
+//   const geometry = new THREE.Geometry();
+//   const line = new THREE.Line(geometry, material);
 
-  for(let j=0; j<dots; j++) {
-    const coord = (j/dots) * radius*2 - radius; 
+//   for(let j=0; j<dots; j++) {
+//     const coord = (j/dots) * radius*2 - radius; 
+//     const vector = new THREE.Vector3(coord, Math.random()*30, 0);
 
-    const vector = new THREE.Vector3(coord, Math.random()*30, 0);
+//     geometry.vertices.push(vector);
+//   }
 
-    geometry.vertices.push(vector);
-  }
+//   line.rotation.x = Math.random() * Math.PI;
+//   line.rotation.y = Math.random() * Math.PI;
+//   line.rotation.z = Math.random() * Math.PI;
 
-  line.rotation.x = Math.random() * Math.PI;
-  line.rotation.y = Math.random() * Math.PI;
-  line.rotation.z = Math.random() * Math.PI;
-
-  group.add(line);
-}
+//   group.add(line);
+// }
 
 // UPDATE LINES
-function updateLines(time) {
-  let vector, line;
-  for (let i = 0; i < lines; i++) {
-    line = group.children[i];  
-    for (let j = 0; j < dots; j++) {
-      vector = line.geometry.vertices[j];
-      let ratio = 1 - (radius - Math.abs(vector.x))/radius;
-      vector.y = Math.sin(j/5 + time/100) * 20 * ratio;
-    }
+// function updateLines(time) {
+//   let vector, line;
+//   for (let i = 0; i < lines; i++) {
+//     line = group.children[i];  
+//     for (let j = 0; j < dots; j++) {
+//       vector = line.geometry.vertices[j];
+//       let ratio = 1 - (radius - Math.abs(vector.x))/radius;
+//       vector.y = Math.sin(j/5 + time/100) * 20 * ratio;
+//     }
 
-    line.geometry.verticesNeedUpdate = true;
-  }
+//     line.geometry.verticesNeedUpdate = true;
+//   }
 
-}
+// }
 
 // CAMERA
 const camera = new THREE.PerspectiveCamera(40, width/height, 1, 1000);
@@ -72,13 +71,42 @@ camera.position.set(0, 0, 300);
 // ORBIT CONTROLS
 const controls = new OrbitControls(camera, renderer.domElement);
 
+// IMAGE
+const canvas2d = document.createElement('canvas');
+const ctx = canvas2d.getContext('2d');
+canvas2d.width = 200;
+canvas2d.height = 200;
+
+const image = document.getElementById('js-pic');
+
+ctx.drawImage(image, 0, 0, 200, 200);
+document.body.appendChild(canvas2d);
+
+const size = 200;
+let data = ctx.getImageData(0, 0, size, size);
+data = data.data;
+
+for(let y = 0; y < size; y++) {
+  const geometry = new THREE.Geometry();
+  const line = new THREE.Line(geometry, material);
+
+  for(let x = 0; x < size; x++) {
+    const bright = data[((size * y) + x) * 4];
+    const vector = new THREE.Vector3(x - size/2, y - size/2, bright/2);
+
+    geometry.vertices.push(vector);
+  }
+  group.add(line);
+}
+
 // RENDER FUNCTION
 let time = 0;
 
 function render() {
   time++;
   renderer.render(scene, camera);
-  updateLines(time);
+  group.rotation.x = (time/1000);
+  // updateLines(time);
   window.requestAnimationFrame(render);
 }
 
