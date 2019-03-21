@@ -3,8 +3,8 @@ import * as THREE from 'three';
 const OrbitControls = require('three-orbit-controls')(THREE);
 
 const canvas = document.getElementById('myscene');
-const width = 600;
-const height = 600;
+const width = window.innerWidth;
+const height = window.innerHeight;
 const dots = 50;
 const lines = 50;
 const radius = 100;
@@ -15,7 +15,7 @@ const renderer = new THREE.WebGLRenderer({
   antialias: true
 });
 
-renderer.setPixelRatio(window.devicePixelRatio>1?2:1);
+renderer.setPixelRatio(window.devicePixelRatio > 1 ? 2 : 1);
 renderer.setSize(width, height);
 renderer.setClearColor(0x999999);
 
@@ -23,6 +23,13 @@ renderer.setClearColor(0x999999);
 const scene = new THREE.Scene();
 const group = new THREE.Group();
 scene.add(group);
+
+// CAMERA
+const camera = new THREE.PerspectiveCamera(40, width/height, 1, 1000);
+camera.position.set(0, 0, 300);
+
+// ORBIT CONTROLS
+const controls = new OrbitControls(camera, renderer.domElement);
 
 // LINE INIT
 const material = new THREE.LineBasicMaterial( {
@@ -46,58 +53,55 @@ const material = new THREE.LineBasicMaterial( {
 //   line.rotation.z = Math.random() * Math.PI;
 
 //   group.add(line);
-// }
 
-// UPDATE LINES
-// function updateLines(time) {
-//   let vector, line;
-//   for (let i = 0; i < lines; i++) {
-//     line = group.children[i];  
-//     for (let j = 0; j < dots; j++) {
-//       vector = line.geometry.vertices[j];
-//       let ratio = 1 - (radius - Math.abs(vector.x))/radius;
-//       vector.y = Math.sin(j/5 + time/100) * 20 * ratio;
-//     }
+function updateLines(time) {
+  let vector, line;
+  for (let i = 0; i < lines; i++) {
+    line = group.children[i];  
+    for (let j = 0; j < dots; j++) {
+      vector = line.geometry.vertices[j];
+      let ratio = 1 - (radius - Math.abs(vector.x))/radius;
+      vector.y = Math.sin(j/5 + time/100) * 20 * ratio;
+    }
 
-//     line.geometry.verticesNeedUpdate = true;
-//   }
+    line.geometry.verticesNeedUpdate = true;
+  }
 
-// }
-
-// CAMERA
-const camera = new THREE.PerspectiveCamera(40, width/height, 1, 1000);
-camera.position.set(0, 0, 300);
-
-// ORBIT CONTROLS
-const controls = new OrbitControls(camera, renderer.domElement);
+}
 
 // IMAGE
 const canvas2d = document.createElement('canvas');
 const ctx = canvas2d.getContext('2d');
-canvas2d.width = 200;
-canvas2d.height = 200;
+const size = 200;
+canvas2d.width = size;
+canvas2d.height = size;
 
 const image = document.getElementById('js-pic');
 
-ctx.drawImage(image, 0, 0, 200, 200);
-document.body.appendChild(canvas2d);
+var img = new Image();   
+img.crossOrigin = 'anonymous';
+img.src = 'src/images/fux.png';
 
-const size = 200;
+img.addEventListener('load', function() {
+
+ctx.drawImage(image, 0, 0, size, size);
+
 let data = ctx.getImageData(0, 0, size, size);
 data = data.data;
 
-for(let y = 0; y < size; y++) {
-  const geometry = new THREE.Geometry();
-  const line = new THREE.Line(geometry, material);
+  for(let y = 0; y < size; y++) {
+    const geometry = new THREE.Geometry();
+    const line = new THREE.Line(geometry, material);
 
-  for(let x = 0; x < size; x++) {
-    const bright = data[((size * y) + x) * 4];
-    const vector = new THREE.Vector3(x - size/2, y - size/2, bright/2);
+    for(let x = 0; x < size; x++) {
+      const bright = data[((size * y) + x) * 4];
+      const vector = new THREE.Vector3(x - size/2, y - size/2, bright/10 - 100);
 
-    geometry.vertices.push(vector);
+      geometry.vertices.push(vector);
+    }
+    group.add(line);
   }
-  group.add(line);
-}
+}, false);
 
 // RENDER FUNCTION
 let time = 0;
@@ -105,7 +109,8 @@ let time = 0;
 function render() {
   time++;
   renderer.render(scene, camera);
-  group.rotation.x = (time/1000);
+  group.rotation.x = Math.PI;
+  group.rotation.y = (time/1000);
   // updateLines(time);
   window.requestAnimationFrame(render);
 }
