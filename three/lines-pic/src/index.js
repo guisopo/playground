@@ -49,6 +49,22 @@ for(let i=0; i<lines; i++) {
   group.add(line);
 }
 
+// UPDATE LINES
+function updateLines(time) {
+  let vector, line;
+  for (let i = 0; i < lines; i++) {
+    line = group.children[i];  
+    for (let j = 0; j < dots; j++) {
+      vector = line.geometry.vertices[j];
+      let ratio = 1 - (radius - Math.abs(vector.x))/radius;
+      vector.y = Math.sin(j/5 + time/100) * 20 * ratio;
+    }
+
+    line.geometry.verticesNeedUpdate = true;
+  }
+
+}
+
 // CAMERA
 const camera = new THREE.PerspectiveCamera(40, width/height, 1, 1000);
 camera.position.set(0, 0, 300);
@@ -57,8 +73,12 @@ camera.position.set(0, 0, 300);
 const controls = new OrbitControls(camera, renderer.domElement);
 
 // RENDER FUNCTION
+let time = 0;
+
 function render() {
+  time++;
   renderer.render(scene, camera);
+  updateLines(time);
   window.requestAnimationFrame(render);
 }
 
