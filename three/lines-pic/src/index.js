@@ -80,7 +80,7 @@ const image = document.getElementById('js-pic');
 
 var img = new Image();   
 img.crossOrigin = 'anonymous';
-img.src = 'src/images/fux.png';
+img.src = 'src/images/david.jpg';
 
 img.addEventListener('load', function() {
 
