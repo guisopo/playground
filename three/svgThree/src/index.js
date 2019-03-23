@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { CubeTexture } from "three";
 const OrbitControls = require('three-orbit-controls')(THREE);
 
-const size = 200;
+const size = 50;
 const canvas = document.createElement('canvas');
 const context = canvas.getContext('2d');
 
@@ -11,12 +11,27 @@ canvas.width = size;
 canvas.height = size;
 canvas.classList.add('temp-canvas');
 document.body.appendChild(canvas);
+let imageCoords = [];
 
 const img = new Image();
 img.onload = function() {
-  context.drawImage(img, 0, 0, width, height);
+  context.drawImage(img, 0, 0, size, size);
+  let data = context.getImageData(0, 0, size, size);
+  data = data.data;
+
+  for(let y=0; y<=size; y++) {
+    for(let x=0; x<=size; x++) {
+      let alpha = data[((size * y) + x) * 4 + 3];
+      if(alpha > 0) {
+        imageCoords.push([10*(x - size/2), 10*(y - size/2)]);
+      }
+    }
+  }
+
 }
+console.log(imageCoords);
 img.src= 'src/images/close.svg';
+
 
 let camera, controls, scene, renderer, geometry;
 const width = window.innerWidth;
