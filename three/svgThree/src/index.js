@@ -1,28 +1,47 @@
 import "./main.scss";
 import * as THREE from 'three';
+import { CubeTexture } from "three";
 const OrbitControls = require('three-orbit-controls')(THREE);
 
+let camera, controls, scene, renderer, geometry;
 const width = window.innerWidth;
 const height = window.innerHeight;
 
-// SCENE
-const scene = new THREE.Scene();
-scene.background = new THREE.Color( 0xcccccc );
+function init() {
+  // SCENE
+  scene = new THREE.Scene();
+  scene.background = new THREE.Color( 0x000000  );
+  
+  // RENDERER
+  renderer = new THREE.WebGLRenderer();
+  renderer.setPixelRatio(window.devicePixelRatio > 1 ? 2 : 1);
+  renderer.setSize(width, height);
 
-// RENDERER
-const renderer = new THREE.WebGLRenderer({
-  canvas: canvas,
-  antialias: true
-});
-renderer.setPixelRatio(window.devicePixelRatio > 1 ? 2 : 1);
-renderer.setSize(width, height);
+  const container = document.getElementById('container');
+  container.appendChild(renderer.domElement);
+  
+  // CAMERA
+  camera = new THREE.PerspectiveCamera(90, width/height, 1, 1000);
+  camera.position.z = 500;
+  
+  // ORBIT CONTROLS
+  controls = new OrbitControls(camera, renderer.domElement);
+  
+  
 
-const container = document.getElementById('myscene');
-container.appendChild(renderer.domElement);
+// ANIMATION
+let i = 0;
 
-// CAMERA
-const camera = new THREE.PerspectiveCamera(90, width/height, 1, 1000);
-camera.position.z = 500;
+function animate() {
+  i++;
+  requestAnimationFrame(animate);
 
-// ORBIT CONTROLS
-const controls = new OrbitControls(camera, renderer.domElement);
+  render();
+}
+
+function render() {
+  renderer.render(scene, camera);
+}
+
+init();
+animate();
