@@ -26,5 +26,8 @@
     "webpack-dev-server": "^3.2.1",
     "webpack-merge": "^4.2.1"
   },
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "gsap": "^2.1.2"
+  }
 }
