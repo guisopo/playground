@@ -30,6 +30,14 @@ function loadImages(paths, whenLoaded) {
   });
 }
 
+function fillUp(array, max) {
+  const length = array.length;
+  for(let i=0; i<max-length; i++) {
+    array.push(array[Math.floor(Math.random() * length)]);
+  }
+  return array;
+}
+
 function getAlphaFromImage(img) { 
   let imageCoords = [];
   context.clearRect(0, 0, size, size);
@@ -45,7 +53,7 @@ function getAlphaFromImage(img) {
       }
     }
   }
-  return imageCoords;
+  return fillUp(imageCoords, 1500);
 }
 
 loadImages(paths, function(loadedImages) {
@@ -83,7 +91,7 @@ loadImages(paths, function(loadedImages) {
     // TEXTURE
     const texture = (new THREE.TextureLoader).load('src/images/particle.png');
     const material = new THREE.PointsMaterial({
-      size: 10,
+      size: 5,
       vertexColors: THREE.VertexColors,
       map: texture,
       alphaTest: 0.5
