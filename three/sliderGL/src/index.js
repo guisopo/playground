@@ -1,3 +1,7 @@
-import { consoleName } from "./utils/console";
 import "./main.scss";
-consoleName('Guillermos');
+
+const slider = document.querySelector('.slider__wrap');
+
+document.body.addEventListener('click', () => {
+  slider.classList.add('a');
+});

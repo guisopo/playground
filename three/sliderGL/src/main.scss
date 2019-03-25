@@ -3,25 +3,39 @@ body {
   background-color: #444;
 }
 
-.profile {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  flex-flow: column;
+.slider {
+  position: relative;
+  height: 600px;
+  width: 900px;
+  overflow: hidden;
+  .slider__super-wrapper{
+    position: absolute;
+    width: 900px;
+    height: 600px;
+    top: 0;
+    left: 0;
+    clip-path: url(#myPath);
+  }
+  .slider__wrap {
+    position: absolute;
+    width: 900px;
+    height: 600px;
+    top: 0;
+    left: 0;
+    transform: translateX(0);
+    transition: transform 0.4s linear;
+    &.a {
+      transform: translateX(-100%);
+    }
+  }
+  .slider__current-slide, .slider__new-slide {
+    position: absolute;
+    width: 900px;
+    height: 600px;
+    background-size: cover;
+    background-position: 50% 50%;
+  }
+  .slider__new-slide {
+    transform: translateX(100%);
+  }
 }
-
-h1 {
-  color: white;
-  font-size: 5em;
-  font-family: sans-serif;
-  text-shadow: 0 0 20px black;
-}
-
-img {
-  border-radius: 100%;
-  width: 300px;
-  height: 300px;
-  text-shadow: 0 0 20px black;
-}
-
