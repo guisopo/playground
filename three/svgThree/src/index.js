@@ -1,6 +1,7 @@
 import "./main.scss";
 import * as THREE from 'three';
 import { CubeTexture } from "three";
+import {TweenMax, TimelineMax} from "gsap/TweenMax";
 const OrbitControls = require('three-orbit-controls')(THREE);
 
 const size = 50;
@@ -110,7 +111,7 @@ loadImages(paths, function(loadedImages) {
     //   geometry.colors.push(new THREE.Color(Math.random(), Math.random(), Math.random()));
     // };
 
-    img2.forEach((coord, index) => {
+    img0.forEach((coord, index) => {
       geometry.vertices.push(new THREE.Vector3(coord[0], coord[1], Math.random()*100));
       geometry.colors.push(new THREE.Color(Math.random(), Math.random(), Math.random()));
     });
@@ -145,4 +146,11 @@ loadImages(paths, function(loadedImages) {
 
   init();
   animate();
+
+  document.addEventListener('click', () => {
+    geometry.vertices.forEach((particle, index) => {
+      const tl = new TimelineMax();
+      tl.to(particle, 1, {x: img2[index][0], y: img2[index][1]});
+    });
+  });
 });

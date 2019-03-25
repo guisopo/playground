@@ -28,6 +28,7 @@
     "webpack-merge": "^4.2.1"
   },
   "dependencies": {
+    "gsap": "^2.1.2",
     "three": "^0.102.1",
     "three-orbit-controls": "^82.1.0"
   }
