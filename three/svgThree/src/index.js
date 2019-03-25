@@ -31,6 +31,14 @@ function loadImages(paths, whenLoaded) {
   });
 }
 
+function shuffle(a) {
+  for(let i = a.length; i; i--) {
+    let j = Math.floor(Math.random() * i);
+    [a[i-1], a[j]] = [a[j], a[i-1]];
+  }
+  return a;
+}
+
 function fillUp(array, max) {
   const length = array.length;
   for(let i=0; i<max-length; i++) {
@@ -54,17 +62,15 @@ function getAlphaFromImage(img) {
       }
     }
   }
-  return fillUp(imageCoords, 1500);
+  return shuffle(fillUp(imageCoords, 1500));
 }
 
 loadImages(paths, function(loadedImages) {
-  let img0 = getAlphaFromImage(loadedImages[0]);
-  let img1 = getAlphaFromImage(loadedImages[1]);
-  let img2 = getAlphaFromImage(loadedImages[2]);
-
-
-
-
+  let gallery = [];
+  loadedImages.forEach((image) => {
+    gallery.push(getAlphaFromImage(image));
+  });
+  console.log(gallery);
   let camera, controls, scene, renderer, geometry;
   const width = window.innerWidth;
   const height = window.innerHeight;
@@ -111,7 +117,7 @@ loadImages(paths, function(loadedImages) {
     //   geometry.colors.push(new THREE.Color(Math.random(), Math.random(), Math.random()));
     // };
 
-    img0.forEach((coord, index) => {
+    gallery[0].forEach((coord, index) => {
       geometry.vertices.push(new THREE.Vector3(coord[0], coord[1], Math.random()*100));
       geometry.colors.push(new THREE.Color(Math.random(), Math.random(), Math.random()));
     });
@@ -147,10 +153,13 @@ loadImages(paths, function(loadedImages) {
   init();
   animate();
 
+  let current = 0;
   document.addEventListener('click', () => {
+    current ++;
+    current = current % gallery.length;
     geometry.vertices.forEach((particle, index) => {
       const tl = new TimelineMax();
-      tl.to(particle, 1, {x: img2[index][0], y: img2[index][1]});
+      tl.to(particle, 1, {x: gallery[current][index][0], y: gallery[current][index][1]});
     });
   });
 });
