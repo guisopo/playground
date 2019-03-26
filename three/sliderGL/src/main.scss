@@ -35,11 +35,11 @@ body {
     height: 600px;
     top: 0;
     left: 0;
-    transform: translateX(0);
+    transform: translate(0, 0);
     transition: transform 0.4s linear;
 
     &.a {
-      transform: translateX(-100%);
+      transform: translate(-100%, 0);
     }
   }
 
@@ -52,6 +52,6 @@ body {
   }
 
   .slider__new-slide {
-    transform: translateX(100%);
+    transform: translate(100%, 0);
   }
 }
