@@ -1,17 +1,12 @@
 import "./main.scss";
 import * as THREE from 'three';
 import { CubeTexture } from "three";
-import {TweenMax, TimelineMax} from "gsap/TweenMax";
+import { TimelineMax } from "gsap/TweenMax";
 const OrbitControls = require('three-orbit-controls')(THREE);
 
 const size = 50;
 const canvas = document.createElement('canvas');
 const context = canvas.getContext('2d');
-
-canvas.width = size;
-canvas.height = size;
-canvas.classList.add('temp-canvas');
-document.body.appendChild(canvas);
 
 const paths = [
   'src/images/arrow.svg',
@@ -153,6 +148,7 @@ loadImages(paths, function(loadedImages) {
   init();
   animate();
 
+  // GSAP: change shape when click
   let current = 0;
   document.addEventListener('click', () => {
     current ++;
@@ -162,4 +158,5 @@ loadImages(paths, function(loadedImages) {
       tl.to(particle, 1, {x: gallery[current][index][0], y: gallery[current][index][1]});
     });
   });
+
 });
