@@ -24,10 +24,12 @@
     "webpack": "^4.29.6",
     "webpack-cli": "^3.2.3",
     "webpack-dev-server": "^3.2.1",
+    "webpack-glsl-loader": "^1.0.1",
     "webpack-merge": "^4.2.1"
   },
   "description": "",
   "dependencies": {
-    "gsap": "^2.1.2"
+    "gsap": "^2.1.2",
+    "pixi.js": "^4.8.7"
   }
 }

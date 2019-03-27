@@ -14,12 +14,12 @@ document.body.addEventListener('click', () => {
 // WEB-GL
 
 const app = new PIXI.Application(900,600);
- 	document.getElementById('webgl').appendChild(app.view);
+document.getElementById('webgl').appendChild(app.view);
 
 
  	// Create background image
- 	const background = PIXI.Sprite.fromImage('img/5_.jpg');
- 	const oldimage = PIXI.Sprite.fromImage('img/6_.jpg');
+ 	const background = PIXI.Sprite.fromImage('src/images/5_.jpg');
+ 	const oldimage = PIXI.Sprite.fromImage('src/images/6_.jpg');
  	background.width = app.renderer.width;
  	background.height = app.renderer.height;
 
@@ -31,7 +31,7 @@ const app = new PIXI.Application(900,600);
  	// Stop application wait for load to finish
  	app.stop();
 
- 	PIXI.loader.add('shader', 'js/shader.js')
+ 	PIXI.loader.add('shader', 'shader.frag')
  	    .load(onLoaded);
 
  	var filter;

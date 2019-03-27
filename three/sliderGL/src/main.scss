@@ -3,6 +3,12 @@ body {
   background-color: #444;
 }
 
+svg {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+}
+
 .slider {
   position: relative;
   height: 600px;
