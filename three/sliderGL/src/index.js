@@ -1,6 +1,6 @@
 import "./main.scss";
 import { TimelineMax } from 'gsap';
-import * as PIXI from 'pixi.js'
+import * as PIXI from 'pixi.js';
 
 document.body.addEventListener('click', () => {
   let tl = new TimelineMax();
