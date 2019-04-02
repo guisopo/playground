@@ -7,7 +7,7 @@ let state = {pos:0};
 document.body.addEventListener('click', () => {
   let tl = new TimelineMax();
   // let tl1 = new TimelineMax();
-  tl.to(state,2,{
+  tl.to(state,1,{
 		pos:1,
 		onUpdate: function() {
 			// let perc = '-'+state.pos*100+'%';
@@ -57,7 +57,7 @@ function onLoaded(loader,res) {
 
 	filter.uniforms.currentImage = background._texture;
 	filter.uniforms.oldImage = oldImage._texture;
-	
+
 	app.start();
 }
 
