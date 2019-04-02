@@ -17,40 +17,40 @@ const app = new PIXI.Application(900,600);
 document.getElementById('webgl').appendChild(app.view);
 
 
- 	// Create background image
- 	const background = PIXI.Sprite.fromImage('src/images/5_.jpg');
- 	const oldimage = PIXI.Sprite.fromImage('src/images/6_.jpg');
- 	background.width = app.renderer.width;
- 	background.height = app.renderer.height;
+// Create background image
+const background = PIXI.Sprite.fromImage('src/images/5_.jpg');
+const oldimage = PIXI.Sprite.fromImage('src/images/6_.jpg');
+background.width = app.renderer.width;
+background.height = app.renderer.height;
 
 
  
- 	app.stage.addChild(background);
+app.stage.addChild(background);
 
 
- 	// Stop application wait for load to finish
- 	app.stop();
+// Stop application wait for load to finish
+app.stop();
 
- 	PIXI.loader.add('shader', 'src/shader.frag')
- 	    .load(onLoaded);
+PIXI.loader.add('shader', 'src/shader.frag')
+		.load(onLoaded);
 
- 	var filter;
-
-
- 	function onLoaded(loader,res) {
+var filter;
 
 
- 	    filter = new PIXI.Filter(null, res.shader.data);
-
- 	    background.filters = [filter];
-
- 	    filter.uniforms.currentimage = background._texture;
- 	    filter.uniforms.oldimage = oldimage._texture;
- 	    filter.uniforms.time = 0;
- 	    app.start();
- 	}
+function onLoaded(loader,res) {
 
 
- 	app.ticker.add(function(delta) {
+		filter = new PIXI.Filter(null, res.shader.data);
+
+		background.filters = [filter];
+
+		filter.uniforms.currentimage = background._texture;
+		filter.uniforms.oldimage = oldimage._texture;
+		filter.uniforms.time = 0;
+		app.start();
+}
+
+
+app.ticker.add(function(delta) {
 
 });
