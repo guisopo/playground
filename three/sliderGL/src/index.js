@@ -31,7 +31,7 @@ document.getElementById('webgl').appendChild(app.view);
  	// Stop application wait for load to finish
  	app.stop();
 
- 	PIXI.loader.add('shader', 'shader.frag')
+ 	PIXI.loader.add('shader', 'src/shader.frag')
  	    .load(onLoaded);
 
  	var filter;
