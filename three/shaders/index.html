@@ -45,6 +45,8 @@
   
       //Render everything!
       function render() {
+        cube.rotation.y += 0.02;
+     
         requestAnimationFrame( render );
         renderer.render( scene, camera );
       }
