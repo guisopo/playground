@@ -15,12 +15,36 @@
   <body>
 
     <script id="fragShader" type="shader-code">
-      uniform sampler2D tex;
-      uniform vec2 res;
+      uniform sampler2D tex;        // Main Texture
+      uniform sampler2D norm;       // Normal Texture
+      uniform vec2 res;             // Screen Dimensions
+      uniform vec3 light;           // Light Source
+
       void main() {
         vec2 pixel = gl_FragCoord.xy / res.xy;
         vec4 color = texture2D(tex,pixel);
-        gl_FragColor = color;
+
+        vec3 normalVector = texture2D(norm,pixel).xyz;
+        vec3 lightVector = vec3(light.x - gl_FragCoord.x, light.y - gl_FragCoord.y, 60.0);
+        
+        // Shift coordinate system. We can't store negative numbers as color values in a texture
+        normalVector.x -= 0.5;
+        normalVector.y -= 0.5;
+
+        // Normalize Our Vectors
+        normalVector = normalize(normalVector);
+        lightVector = normalize(lightVector);
+        
+        // Distance of the current pixel from the light position
+        float dist = distance(gl_FragCoord.xy, light.xy);
+
+        if(light.z * res.x > dist){ //Check if distance is greater than 50% of the screen width
+          float diffuse = 1.5 * max(dot( normalVector, lightVector ), 0.0); //  Angle Between Our Vectors. Max because we don't want negative values in our colors
+          float distanceFactor = (1.0 - dist/(light.z * res.x)); // (light.z * res.x) is the radius length
+          gl_FragColor = color * diffuse * distanceFactor;
+        } else {
+          gl_FragColor = vec4(0.0);
+        }
       }
     </script>
 
@@ -31,15 +55,15 @@
       let renderer;
 
       function scene_setup(){
-      //This is all code needed to set up a basic ThreeJS scene
-      //First we initialize the scene and our camera
-      scene = new THREE.Scene();
-      camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+        //This is all code needed to set up a basic ThreeJS scene
+        //First we initialize the scene and our camera
+        scene = new THREE.Scene();
+        camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 
-      //We create the WebGL renderer and add it to the document
-      renderer = new THREE.WebGLRenderer();
-      renderer.setSize( window.innerWidth, window.innerHeight );
-      document.body.appendChild( renderer.domElement );
+        //We create the WebGL renderer and add it to the document
+        renderer = new THREE.WebGLRenderer();
+        renderer.setSize( window.innerWidth, window.innerHeight );
+        document.body.appendChild( renderer.domElement );
       }
 
       //Initialize the Threejs scene
@@ -51,28 +75,40 @@
       const textureURL = "https://raw.githubusercontent.com/tutsplus/Beginners-Guide-to-Shaders/master/Part3/images/blocks.JPG"
       THREE.ImageUtils.crossOrigin = '';//Allows us to load an external image
 
+      const normalURL = "https://raw.githubusercontent.com/tutsplus/Beginners-Guide-to-Shaders/master/Part3/normal_maps/blocks_normal.JPG"
+      const normal = THREE.ImageUtils.loadTexture(normalURL);
+
+
       //Load in the texture 
       const texture = THREE.ImageUtils.loadTexture(textureURL);
 
       //Set up the uniforms we'll send to our share
-      //More info on uniform types: https://threejs.org/docs/#Reference/Materials/ShaderMaterial
       const uniforms = {
-      tex : {type:'t',value:texture},//The texture
-      res : {type: 'v2',value:new THREE.Vector2(window.innerWidth,window.innerHeight)}//Keeps the resolution
+        norm: {type:'t', value:normal},
+        light: {type:'v3', value:new THREE.Vector3()}, // The light
+        tex : {type:'t', value:texture},  //The texture
+        res : {type: 'v2', value:new THREE.Vector2(window.innerWidth, window.innerHeight)} //Keeps the resolution
       }
+      uniforms.light.value.z = 0.5;//Our radius
       //We stick our shader onto a 2d plane big enough to fill the screen
-      const material = new THREE.ShaderMaterial({uniforms:uniforms,fragmentShader:shaderCode})
-      const geometry = new THREE.PlaneGeometry( 10, 10 );
-      const sprite = new THREE.Mesh( geometry,material );
+      const material = new THREE.ShaderMaterial( {uniforms:uniforms, fragmentShader:shaderCode} );
+      const geometry = new THREE.PlaneGeometry(10, 10);
+      const sprite = new THREE.Mesh(geometry,material);
       //Add it to the scene
       scene.add( sprite );
       //Move the camera back so we can see it
       camera.position.z = 2;
 
+      //Event Listeners
+      document.addEventListener('mousemove', (event) => {
+        uniforms.light.value.x = event.clientX;
+        uniforms.light.value.y = window.innerHeight - event.clientY;
+      });
+
       //Render everything!
       function render() {
-      requestAnimationFrame( render );
-      renderer.render( scene, camera );
+        requestAnimationFrame( render );
+        renderer.render( scene, camera );
       }
       render();
 
