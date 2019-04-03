@@ -73,30 +73,32 @@
       //Pull the shader code from the html
       const shaderCode = document.getElementById("fragShader").innerHTML;
 
-      const textureURL = "https://raw.githubusercontent.com/tutsplus/Beginners-Guide-to-Shaders/master/Part3/images/blocks.JPG"
+      // Load textures
       THREE.ImageUtils.crossOrigin = '';//Allows us to load an external image
+
+      const textureURL = "https://raw.githubusercontent.com/tutsplus/Beginners-Guide-to-Shaders/master/Part3/images/blocks.JPG"
+      const texture = THREE.ImageUtils.loadTexture(textureURL);
 
       const normalURL = "https://raw.githubusercontent.com/tutsplus/Beginners-Guide-to-Shaders/master/Part3/normal_maps/blocks_normal.JPG"
       const normal = THREE.ImageUtils.loadTexture(normalURL);
 
-
-      //Load in the texture 
-      const texture = THREE.ImageUtils.loadTexture(textureURL);
-
       //Set up the uniforms we'll send to our share
       const uniforms = {
-        norm: {type:'t', value:normal},
-        light: {type:'v3', value:new THREE.Vector3()}, // The light
-        tex : {type:'t', value:texture},  //The texture
-        res : {type: 'v2', value:new THREE.Vector2(window.innerWidth, window.innerHeight)} //Keeps the resolution
+        norm:   { type: 't',  value: normal}, // The normal
+        tex :   { type: 't',  value: texture},  //The texture
+        light:  { type: 'v3', value: new THREE.Vector3()}, // The light
+        res :   { type: 'v2', value: new THREE.Vector2(window.innerWidth, window.innerHeight)} //Keeps the resolution
       }
-      uniforms.light.value.z = 0.5;//Our radius
+      uniforms.light.value.z = 0.5; //Light radius
+
       //We stick our shader onto a 2d plane big enough to fill the screen
-      const material = new THREE.ShaderMaterial( {uniforms:uniforms, fragmentShader:shaderCode} );
-      const geometry = new THREE.PlaneGeometry(10, 10);
-      const sprite = new THREE.Mesh(geometry,material);
+      const material =  new THREE.ShaderMaterial( { uniforms:uniforms, fragmentShader:shaderCode } );
+      const geometry =  new THREE.PlaneGeometry(10, 10);
+      const sprite   =  new THREE.Mesh(geometry,material);
+
       //Add it to the scene
       scene.add( sprite );
+
       //Move the camera back so we can see it
       camera.position.z = 2;
 
