@@ -22,6 +22,7 @@
 
       void main() {
         vec2 pixel = gl_FragCoord.xy / res.xy;
+        // vec4 color = vec4(1.0); //solid white
         vec4 color = texture2D(tex,pixel);
 
         vec3 normalVector = texture2D(norm,pixel).xyz;
@@ -39,7 +40,7 @@
         float dist = distance(gl_FragCoord.xy, light.xy);
 
         if(light.z * res.x > dist){ //Check if distance is greater than 50% of the screen width
-          float diffuse = 1.5 * max(dot( normalVector, lightVector ), 0.0); //  Angle Between Our Vectors. Max because we don't want negative values in our colors
+          float diffuse = 1.5 * max(dot( normalVector, lightVector ), 0.0); // Angle Between Our Vectors. Max because we don't want negative values in our colors
           float distanceFactor = (1.0 - dist/(light.z * res.x)); // (light.z * res.x) is the radius length
           gl_FragColor = color * diffuse * distanceFactor;
         } else {
