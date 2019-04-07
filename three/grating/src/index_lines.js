@@ -10,7 +10,6 @@ document.body.appendChild( stats.dom );
 
 let camera, scene, renderer;
 let geometry, material, mesh, controls;
-let size = 20;
 
 function init() {
   // SETUP
@@ -26,12 +25,9 @@ function init() {
   renderer = new THREE.WebGLRenderer( { antialias: true } );
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize( window.innerWidth, window.innerHeight );
-
-  // OBJECTS
-
-
   document.body.appendChild( renderer.domElement );
 
+  // OBJECTS
   material = new THREE.ShaderMaterial({
     wireframe: true,
     extensions: {
@@ -54,7 +50,11 @@ function init() {
 }
 
 function updatePlane(time) {
-
+  for (let i = 0; i < geometry.vertices.length; i++) {
+    const vec = geometry.vertices[i];
+    vec.z = 100 * Perlin(vec.x/100, vec.y/100, time/100);
+  }
+  geometry.verticesNeedUpdate = true;
 }
 
 
@@ -62,7 +62,7 @@ let time = 0;
 function animate() {
   stats.begin();
 
-  // updatePlane(time);
+  updatePlane(time);
   time++;
   renderer.render(scene, camera);
   requestAnimationFrame(animate);
