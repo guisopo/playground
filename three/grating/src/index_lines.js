@@ -29,7 +29,7 @@ function init() {
 
   // OBJECTS
   material = new THREE.ShaderMaterial({
-    wireframe: true,
+    // wireframe: true,
     extensions: {
       derivatives: '#extension GL_OES_standard_derivatives : enable',
     },
