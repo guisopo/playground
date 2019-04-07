@@ -12,9 +12,11 @@ animate();
 function init() {
   // SETUP
   scene = new THREE.Scene();
+  scene.position.x = -1;
+  scene.position.y = -1;
 
   camera = new THREE.PerspectiveCamera( 90, window.innerWidth / window.innerHeight, 0.1, 3000 );
-  camera.position.z = 1;
+  camera.position.z = 2;
 
   controls = new OrbitControls(camera);
 
