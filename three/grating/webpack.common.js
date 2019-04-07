@@ -2,7 +2,7 @@ const path = require("path");
 
 module.exports = {
   entry: {
-    main: "./src/index.js"
+    main: "./src/index_lines.js"
   },
   module: {
     rules: [

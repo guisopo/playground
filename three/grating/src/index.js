@@ -2,6 +2,11 @@ import "./main.scss";
 import  Perlin from './lib/perlin';
 import * as THREE from 'three';
 const OrbitControls = require('three-orbit-controls')(THREE)
+import Stats from 'stats-js';
+
+const stats = new Stats();
+stats.showPanel( 0 );
+document.body.appendChild( stats.dom );
 
 let camera, scene, renderer;
 let geometry, material, meshX, meshY, controls, groupX, groupY;
@@ -59,8 +64,8 @@ function updateGrid(time) {
     for (let j = 0; j < size; j++) {
       let vecX = lineX.geometry.vertices[j];
       let vecY = lineY.geometry.vertices[j];
-      vecX.z = Perlin(vecX.x, vecY.y, time/150);
-      vecY.z = Perlin(vecY.x, vecY.y, time/150);
+      vecX.z = 2 * Perlin(vecX.x, vecX.y, time/150);
+      vecY.z = 2 * Perlin(vecY.x, vecY.y, time/150);
     }
     lineX.geometry.verticesNeedUpdate = true;
     lineY.geometry.verticesNeedUpdate = true;
@@ -69,10 +74,12 @@ function updateGrid(time) {
 
 let time = 0;
 function animate() {
+  stats.begin();
   time++;
   updateGrid(time);
   renderer.render(scene, camera);
   requestAnimationFrame(animate);
+  stats.end();
 }
 
-init();
+// init();

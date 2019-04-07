@@ -1,0 +1,68 @@
+import "./main.scss";
+import  Perlin from './lib/perlin';
+import * as THREE from 'three';
+const OrbitControls = require('three-orbit-controls')(THREE)
+import Stats from 'stats-js';
+
+const stats = new Stats();
+stats.showPanel( 0 );
+document.body.appendChild( stats.dom );
+
+let camera, scene, renderer;
+let geometry, material, meshX, meshY, controls, groupX, groupY;
+let size = 20;
+
+function init() {
+  // SETUP
+  scene = new THREE.Scene();
+  scene.position.x = -1;
+  scene.position.y = -1;
+
+  camera = new THREE.PerspectiveCamera( 90, window.innerWidth / window.innerHeight, 0.1, 3000 );
+  camera.position.z = 2;
+
+  controls = new OrbitControls(camera);
+
+  renderer = new THREE.WebGLRenderer( { antialias: true } );
+  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.setSize( window.innerWidth, window.innerHeight );
+
+  // OBJECTS
+
+
+  document.body.appendChild( renderer.domElement );
+  animate();
+}
+
+const material = new THREE.ShaderMaterial({
+  wireframe: true,
+  extensions: {
+    derivatives: '#extension GL_OES_standard_derivatives : enable',
+  },
+  uniforms: {
+    time: {type: 'f', value: 0.0},
+  },
+  vertexShader: document.getElementById('vertShader').textContent,
+  fragmentShader: document.getElementById('fragShader').textContent,
+  side: THREE.DoubleSide
+});
+
+
+function updatePlane(time) {
+
+}
+
+
+let time = 0;
+function animate() {
+  stats.begin();
+
+  updatePlane(time);
+  time++;
+  renderer.render(scene, camera);
+  requestAnimationFrame(animate);
+
+  stats.end();
+}
+
+init();
