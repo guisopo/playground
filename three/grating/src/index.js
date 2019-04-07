@@ -1,14 +1,12 @@
 import "./main.scss";
+import  Perlin from './lib/perlin';
 import * as THREE from 'three';
 const OrbitControls = require('three-orbit-controls')(THREE)
 
 let camera, scene, renderer;
-let geometry, material, meshX, meshY, controls;
+let geometry, material, meshX, meshY, controls, groupX, groupY;
 let size = 20;
 
-init();
-animate();
- 
 function init() {
   // SETUP
   scene = new THREE.Scene();
@@ -25,32 +23,56 @@ function init() {
   renderer.setSize( window.innerWidth, window.innerHeight );
 
   // OBJECTS
+  groupX = new THREE.Group();
+  groupY = new THREE.Group();
+
+  scene.add(groupX);
+  scene.add(groupY);
+
   let material = new THREE.LineBasicMaterial( { color: 0xffffff } );
   
   for (let i = 0; i < size; i++) {
     let geometryX = new THREE.Geometry();
     let geometryY = new THREE.Geometry();
     for (let j = 0; j < size; j++) {
-      geometryX.vertices.push(
+      geometryY.vertices.push(
         new THREE.Vector3(i*0.1, j*0.1, 0)
       );
-      geometryY.vertices.push(
+      geometryX.vertices.push(
         new THREE.Vector3(j*0.1, i*0.1, 0)
       );
     }
     meshX = new THREE.Line(geometryX, material);
     meshY = new THREE.Line(geometryY, material);
-    scene.add(meshX);
-    scene.add(meshY);
+    groupX.add(meshX);
+    groupY.add(meshY);
   }
 
   document.body.appendChild( renderer.domElement );
+  animate();
 }
- 
+
+function updateGrid(time) {
+  for (let i = 0; i < size; i++) {
+    let lineX = groupX.children[i];
+    let lineY = groupY.children[i];
+    for (let j = 0; j < size; j++) {
+      let vecX = lineX.geometry.vertices[j];
+      let vecY = lineY.geometry.vertices[j];
+      vecX.z = Perlin(vecX.x, vecY.y, time/150);
+      vecY.z = Perlin(vecY.x, vecY.y, time/150);
+    }
+    lineX.geometry.verticesNeedUpdate = true;
+    lineY.geometry.verticesNeedUpdate = true;
+  }
+}
+
+let time = 0;
 function animate() {
- 
-    requestAnimationFrame( animate );
- 
-    renderer.render( scene, camera );
- 
+  time++;
+  updateGrid(time);
+  renderer.render(scene, camera);
+  requestAnimationFrame(animate);
 }
+
+init();
