@@ -9,7 +9,7 @@ stats.showPanel( 0 );
 document.body.appendChild( stats.dom );
 
 let camera, scene, renderer;
-let geometry, material, meshX, meshY, controls, groupX, groupY;
+let geometry, material, mesh, controls;
 let size = 20;
 
 function init() {
@@ -19,7 +19,7 @@ function init() {
   scene.position.y = -1;
 
   camera = new THREE.PerspectiveCamera( 90, window.innerWidth / window.innerHeight, 0.1, 3000 );
-  camera.position.z = 2;
+  camera.position.z = 1000;
 
   controls = new OrbitControls(camera);
 
@@ -31,22 +31,27 @@ function init() {
 
 
   document.body.appendChild( renderer.domElement );
+
+  material = new THREE.ShaderMaterial({
+    wireframe: true,
+    extensions: {
+      derivatives: '#extension GL_OES_standard_derivatives : enable',
+    },
+    uniforms: {
+      time: {type: 'f', value: 0.0},
+    },
+    vertexShader: document.getElementById('vertShader').textContent,
+    fragmentShader: document.getElementById('fragShader').textContent,
+    side: THREE.DoubleSide
+  });
+
+  geometry = new THREE.PlaneGeometry( 600, 600, 20, 20);
+  mesh = new THREE.Mesh(geometry, material);
+
+  scene.add(mesh, material);
+
   animate();
 }
-
-const material = new THREE.ShaderMaterial({
-  wireframe: true,
-  extensions: {
-    derivatives: '#extension GL_OES_standard_derivatives : enable',
-  },
-  uniforms: {
-    time: {type: 'f', value: 0.0},
-  },
-  vertexShader: document.getElementById('vertShader').textContent,
-  fragmentShader: document.getElementById('fragShader').textContent,
-  side: THREE.DoubleSide
-});
-
 
 function updatePlane(time) {
 
@@ -57,7 +62,7 @@ let time = 0;
 function animate() {
   stats.begin();
 
-  updatePlane(time);
+  // updatePlane(time);
   time++;
   renderer.render(scene, camera);
   requestAnimationFrame(animate);
