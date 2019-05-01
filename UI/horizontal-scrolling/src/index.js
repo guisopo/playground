@@ -8,7 +8,7 @@ class Smooth {
 
     this.el = document.querySelector('[data-scroll]');
     this.content = document.querySelector('[data-scroll-content]');
-
+    this.skew = 0;
     this.dom = {
       el: this.el,
       content: this.content,
@@ -59,9 +59,14 @@ class Smooth {
   run() {
 
   }
+  
 
   resize() {
 
+  }
+
+  clamp(x) {
+    this.skew = Math.min(Math.max(x, -15), 15);
   }
 
   addEvents() {
@@ -69,10 +74,11 @@ class Smooth {
     window.addEventListener('wheel', (e) => {
       const x  = e.deltaY;
       moveX = moveX + x;
+      this.clamp(x);
       const width = this.content.getBoundingClientRect().width - window.innerWidth;
       let delta = (this.content.getBoundingClientRect().width - window.innerWidth) - moveX;
       if(delta > 0 && delta < width) {
-        this.content.style.transform = `translate3d(-${moveX}px, 0, 0)`;
+        this.content.style.transform = `translate3d(-${moveX}px, 0, 0) skewX(${this.skew}deg)`;
       } else if (delta < 0) {
         moveX = width;
         delta = 0;
@@ -82,7 +88,7 @@ class Smooth {
         delta = width;
         this.content.style.transform = `translate3d(0px, 0, 0)`;
       }
-      console.log(moveX, delta, this.content.style.transform);
+      console.log(this.skew);
     });
   }
 
