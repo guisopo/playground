@@ -9,6 +9,7 @@ class Smooth {
     this.el = document.querySelector('[data-scroll]');
     this.content = document.querySelector('[data-scroll-content]');
     this.skew = 0;
+    this.scale = 0;
     this.dom = {
       el: this.el,
       content: this.content,
@@ -65,20 +66,24 @@ class Smooth {
 
   }
 
-  clamp(x) {
-    this.skew = Math.min(Math.max(x, -15), 15);
+  clamp(x, bound) {
+    this.skew = Math.min(Math.max(x, -bound), bound);
   }
 
   addEvents() {
     var moveX = 0;
+    window.addEventListener('click', () => {
+      console.log(this.scale);
+    });
     window.addEventListener('wheel', (e) => {
       const x  = e.deltaY;
       moveX = moveX + x;
-      this.clamp(x);
+      this.skew = Math.min(Math.max(x, -10), 10);
+      this.scale = 10/ Math.min(Math.max(x, 10), 15);
       const width = this.content.getBoundingClientRect().width - window.innerWidth;
       let delta = (this.content.getBoundingClientRect().width - window.innerWidth) - moveX;
       if(delta > 0 && delta < width) {
-        this.content.style.transform = `translate3d(-${moveX}px, 0, 0) skewX(${this.skew}deg)`;
+        this.content.style.transform = `translate3d(-${moveX}px, 0, 0) skewX(${this.skew}deg) scale(${this.scale})`;
       } else if (delta < 0) {
         moveX = width;
         delta = 0;
@@ -88,7 +93,7 @@ class Smooth {
         delta = width;
         this.content.style.transform = `translate3d(0px, 0, 0)`;
       }
-      console.log(this.skew);
+      console.log(this.skew, this.scale);
     });
   }
 
