@@ -9,13 +9,17 @@
   font-style: normal;
 }
 
+html {
+  overscroll-behavior: none;
+}
+
 html, body{
-font-family: 'helvetica neue';
+  height: 100%;
+  overflow: hidden;
 }
 
 body{
-height: 100%;
-overflow-y: scroll;
+font-family: 'helvetica neue';
 padding: 0;
 margin: 0;
 background-color: #111;
@@ -38,16 +42,23 @@ margin: 0;
 //==================
 // SLIDER
 
-.scroll {
-  cursor: grab;
+.coverflow {
   position: fixed;
   top: 0;
   left: 0;
-  height: 100%;
   width: 100vw;
+  height: 100%;
   display: flex;
   align-items: center;
-  overflow: hidden;
+  overflow-y: hidden;
+}
+
+.scroll {
+  cursor: grab;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
 }
 
 .scroll-content {
@@ -65,7 +76,7 @@ margin: 0;
   display: flex;
   width: 50vw; 
   height: 100%;
-  padding: 20vh;
+  padding: 30vh 10vh;
   // position: absolute;
 
   &--1 {
@@ -91,11 +102,10 @@ margin: 0;
   &__img {
     position: relative;
     overflow: hidden;
-    width: 65vh;
-    height: calc(65vh*21/29.7);
+    width: calc(50vw - 20vh);
+    height: calc((50vw - 20vh)*21/29.7);
 
     figure {
-      // position: absolute;
       width: inherit;
       height: inherit;
 
