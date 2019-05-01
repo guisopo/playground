@@ -40,19 +40,25 @@ margin: 0;
 
 .scroll {
   cursor: grab;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
 }
 
 .scroll-content {
+  position: absolute;
+  top: 0;
+  left: 0;
   display: flex;
   white-space: nowrap;
-  position: relative;
+  position: absolute;
   height: 100vh;
-
-  &--last {
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
+  transform: translate3d(0, 0, 0);
 }
 
 .slide {
@@ -79,58 +85,24 @@ margin: 0;
     padding-right: 15vw;
   }
 
-  &__inner {
-    position: relative;
-    padding-left: 15vw;
-    width: 100%;
-  }
-
-  &__sub-title {
-    position: absolute;
-    top: 15%;
-    left: 5vw;
-    color: rgba(#fff, 0.5);
-    font-size: 1vw;
-  }
-
-  &__title{
-    position: absolute;
-    top: 7.5%;
-    left: 7.5vw;
-    color: #fff;
-    font-size: 4vw;
-    z-index: 2;
-    overflow: hidden;
-  }
-
-  &__project{
-    position: absolute;
-    color: #fff;
-    top: 100%;
-    right: 5%;
-    font-size: 1.15vw;
-    padding-top: 1.5vw;
-  }
+  // &__inner {
+  // }
 
   &__img {
     position: relative;
     overflow: hidden;
-    padding-top: 65%;
-    width: 100%;
+    width: 65vh;
+    height: calc(65vh*21/29.7);
 
     figure {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      // position: absolute;
+      width: inherit;
+      height: inherit;
 
       img {
         position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
+        width: inherit;
+        height: inherit;
         object-fit: cover;
       }
     }
