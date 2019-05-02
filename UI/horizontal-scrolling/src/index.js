@@ -63,14 +63,14 @@ class Smooth {
       this.scale = 10/ Math.min(Math.max(x, 10), 15);
 
       const width = this.content.getBoundingClientRect().width - window.innerWidth;
-      let delta = (this.content.getBoundingClientRect().width - window.innerWidth) - moveX;
+      let delta = (this.content.getBoundingClientRect().width - window.innerWidth) - this.moveX;
 
       if(delta > 0 && delta < width) {
-        this.content.style.transform = `translate3d(-${moveX}px, 0, 0) skewX(${this.skew}deg) scale(${this.scale})`;
+        this.content.style.transform = `translate3d(-${this.moveX}px, 0, 0) skewX(${this.skew}deg) scale(${this.scale})`;
       } else if (delta < 0) {
         moveX = width;
         delta = 0;
-        this.content.style.transform = `translate3d(-${width}px, 0, 0)`;
+        this.content.style.transform = `translate3d(-${this.moveX}px, 0, 0)`;
       } else if (delta > width) {
         moveX = 0;
         delta = width;
@@ -85,7 +85,7 @@ class Smooth {
   }
 
   requestAnimationFrame() {
-
+    this.rAF = requestAnimationFrame(this.run)
   }
 
   init() {
