@@ -8,27 +8,16 @@ class Smooth {
 
     this.el = document.querySelector('[data-scroll]');
     this.content = document.querySelector('[data-scroll-content]');
-    this.skew = 0;
-    this.scale = 0;
+    
     this.dom = {
       el: this.el,
       content: this.content,
       elements: [...this.content.querySelectorAll('.js-slide')],
     }
 
-    this.data = {
-      total: this.dom.elements.length -1,
-      current: 0,
-      last: {}
-    }
-
-    this.bounds = {
-      elem: 0,
-      content: 0,
-      width: 0,
-      max: 0,
-      min: 0
-    }
+    this.moveX = 0;
+    this.skew = 0;
+    this.scale = 0;
 
     this.rAF = null;
 
@@ -46,11 +35,6 @@ class Smooth {
 
   setBounds(elements) {
 
-    elements.forEach((element, index) => {
-      
-      const bounds = element.getBoundingClientRect();
-
-    })
   }
 
   scroll() {
@@ -71,17 +55,16 @@ class Smooth {
   }
 
   addEvents() {
-    var moveX = 0;
-    window.addEventListener('click', () => {
-      console.log(this.scale);
-    });
     window.addEventListener('wheel', (e) => {
       const x  = e.deltaY;
-      moveX = moveX + x;
+      this.moveX = this.moveX + x;
+
       this.skew = Math.min(Math.max(x, -10), 10);
       this.scale = 10/ Math.min(Math.max(x, 10), 15);
+
       const width = this.content.getBoundingClientRect().width - window.innerWidth;
       let delta = (this.content.getBoundingClientRect().width - window.innerWidth) - moveX;
+
       if(delta > 0 && delta < width) {
         this.content.style.transform = `translate3d(-${moveX}px, 0, 0) skewX(${this.skew}deg) scale(${this.scale})`;
       } else if (delta < 0) {
@@ -93,14 +76,11 @@ class Smooth {
         delta = width;
         this.content.style.transform = `translate3d(0px, 0, 0)`;
       }
-      console.log(this.skew, this.scale);
     });
   }
 
   on() {
-    this.setBounds(this.dom.elements);
     this.addEvents();
-
     this.requestAnimationFrame();
   }
 
