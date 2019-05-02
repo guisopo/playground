@@ -66,13 +66,15 @@ class Smooth {
       let delta = (this.content.getBoundingClientRect().width - window.innerWidth) - this.moveX;
 
       if(delta > 0 && delta < width) {
-        this.content.style.transform = `translate3d(-${this.moveX}px, 0, 0) skewX(${this.skew}deg) scale(${this.scale})`;
+        this.content.style.transform = `translate3d(-${this.moveX}px, 0, 0) 
+                                        skewX(${this.skew}deg) 
+                                        scale(${this.scale})`;
       } else if (delta < 0) {
-        moveX = width;
+        this.moveX = width;
         delta = 0;
         this.content.style.transform = `translate3d(-${this.moveX}px, 0, 0)`;
       } else if (delta > width) {
-        moveX = 0;
+        this.moveX = 0;
         delta = width;
         this.content.style.transform = `translate3d(0px, 0, 0)`;
       }
