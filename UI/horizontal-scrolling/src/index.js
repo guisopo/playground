@@ -47,19 +47,18 @@ class Smooth {
     const width = this.content.getBoundingClientRect().width - window.innerWidth;
     let   delta = (this.content.getBoundingClientRect().width - window.innerWidth) - this.moveX;
 
-    if(delta > 0 && delta < width) {
-      this.content.style.transform = `translate3d(-${this.moveX}px, 0, 0) 
-                                      skewX(${this.skew}deg)
-                                      scale(${this.scale})`;
-    } else if (delta < 0) {
+    if (delta < 0) {
       this.moveX = width;
       delta = 0;
-      this.content.style.transform = `translate3d(-${this.moveX}px, 0, 0)`;
     } else if (delta > width) {
       this.moveX = 0;
       delta = width;
-      this.content.style.transform = `translate3d(0px, 0, 0)`;
     }
+
+    this.content.style.transform = `translate3d(-${this.moveX}px, 0, 0) 
+                                    skewX(${this.skew}deg)
+                                    scale(${this.scale})`;
+
     this.requestAnimationFrame()
   }
 
