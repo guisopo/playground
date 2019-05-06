@@ -31,19 +31,11 @@ class Smooth {
   }
 
   bindAll() {
-    ['scroll', 'run', 'resize']
+    ['wheel', 'run']
     .forEach( fn => this[fn] = this[fn].bind(this));
   }
 
-  preload() {
-    
-  }
-
-  setBounds(elements) {
-
-  }
-
-  scroll(e) {
+  wheel(e) {
     this.x  = e.deltaY;
     this.moveX = this.moveX + this.x;
   }
@@ -70,18 +62,13 @@ class Smooth {
     }
     this.requestAnimationFrame()
   }
-  
-
-  resize() {
-
-  }
 
   clamp(x, bound) {
      return Math.min(Math.max(x, -bound), bound);
   }
 
   addEvents() {
-    window.addEventListener('wheel', this.scroll);
+    window.addEventListener('wheel', this.wheel);
   }
 
   on() {
@@ -94,7 +81,6 @@ class Smooth {
   }
 
   init() {
-    this.preload();
     this.on();
   }
 }
