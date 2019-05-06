@@ -59,12 +59,16 @@ class Smooth {
                                     skewX(${this.skew}deg)
                                     scale(${this.scale})`;
 
-    this.requestAnimationFrame()
+    this.requestAnimationFrame();
   }
 
   clamp(x, bound) {
      return Math.min(Math.max(x, -bound), bound);
   }
+
+  lerp (a, b, n) {
+		return (1 - n) * a + n * b
+	}
 
   addEvents() {
     window.addEventListener('wheel', this.wheel);
@@ -76,7 +80,7 @@ class Smooth {
   }
 
   requestAnimationFrame() {
-    this.rAF = requestAnimationFrame(this.run)
+    this.rAF = requestAnimationFrame(this.run);
   }
 
   init() {
