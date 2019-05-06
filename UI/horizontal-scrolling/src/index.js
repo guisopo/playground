@@ -53,16 +53,14 @@ class Smooth {
     const width = this.content.getBoundingClientRect().width - window.innerWidth;
     let   delta = (this.content.getBoundingClientRect().width - window.innerWidth) - this.moveX;
     
-    this.skew = this.clamp(this.x, 500)/10;
-    this.scale = 1 - this.clamp(Math.abs(this.x), 1000)/1000;
-    
     this.data.last = this.lerp(this.data.last, this.data.current, 0.095);
     this.data.last = Math.floor(this.data.last * 100) / 100;
     
     const diff = this.data.current - this.data.last;
     const acc = Math.floor(diff / width * 100) / 100;
     const velo =+ acc;
-    const bounce = 1 - Math.abs(velo * 0.25);
+
+    const bounce = 1 - Math.abs(velo * 0.35);
     const skew = velo * 10;
     
     if (delta < 0) {
