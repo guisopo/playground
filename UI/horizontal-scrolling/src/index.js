@@ -15,6 +15,11 @@ class Smooth {
       elements: [...this.content.querySelectorAll('.js-slide')],
     }
 
+    this.data = {
+      current: 0,
+      last: 0
+    }
+
     this.moveX = 0;
     this.skew = 0;
     this.scale = 0;
