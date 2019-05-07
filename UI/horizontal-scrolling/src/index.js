@@ -78,7 +78,7 @@ class Smooth {
     //                                 scale(${scale})`;
 
     this.content.style.transform = `translate3d(-${this.data.last }px, 0, 0) 
-                                    rotateY(${rotate})`;
+                                    rotateY(${rotate}deg)`;
 
     this.requestAnimationFrame();
   }
