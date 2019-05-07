@@ -60,9 +60,9 @@ class Smooth {
     const acc = Math.floor(diff / width * 10000) / 10000;
     const velo =+ acc;
 
-    const scale = 1 - Math.abs(velo * 0.35);
+    const scale = 1 - Math.abs(velo * 1);
     const skew = velo * 10;
-    const rotate = velo * 10;
+    const rotate = velo * 20;
     
     if (delta < 0) {
       this.moveX = width;
@@ -71,14 +71,15 @@ class Smooth {
       this.moveX = 0;
       delta = width;
     }
-    console.log(rotate);
-    this.content.style.transformOrigin = `50% 50%`;
-    // this.content.style.transform = `translate3d(-${this.data.last }px, 0, 0) 
-    //                                 skewX(${skew}deg)
-    //                                 scale(${scale})`;
-
     this.content.style.transform = `translate3d(-${this.data.last }px, 0, 0) 
-                                    rotateY(${rotate}deg)`;
+                                    skewX(${skew}deg)
+                                    scale(${scale})`;
+    
+    // ROTATE OPTION
+    // const transformOr = -(100 - (delta * 100 / width));
+    // this.content.style.transformOrigin = `50% ${transformOr}%`;
+    // this.content.style.transform = `translate3d(-${this.data.last}px, 0, 0)
+    //                                 rotateY(${rotate}deg)`;
 
     this.requestAnimationFrame();
   }
