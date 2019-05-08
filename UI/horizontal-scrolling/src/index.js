@@ -71,6 +71,8 @@ class Smooth {
       this.moveX = 0;
       delta = width;
     }
+
+    // SKEW + SCALE OPTION
     this.content.style.transform = `translate3d(-${this.data.last }px, 0, 0) 
                                     skewX(${skew}deg)
                                     scale(${scale})`;
