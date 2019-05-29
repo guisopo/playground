@@ -348,13 +348,30 @@ template {
   display: none;
 }
 
+/* ========================== */
+/*        Own styles          */
+/* ========================== */
+
+@import url('https://fonts.googleapis.com/css?family=Heebo');
 
 #app {
+  font-family: Heebo, sans-serif;
+  font-size: 1.5vw;
+  font-weight: 300;
+  line-height: 1.5;
   display: grid;
   width: 100vw;
   height: 100vh;
   background-color: #DFDBD2;
   grid-template: 1 / 1;
+}
+
+[data-state="detail"] [data-scene]:not([data-scene="detail"]) {
+  display: none;
+}
+
+[data-state="gallery"] [data-scene]:not([data-scene="gallery"]) {
+  display: none;
 }
 
 .screen {
@@ -411,6 +428,10 @@ template {
   }
 }
 
+figcaption {
+  font-size: 125%;
+}
+
 /* ========================= */
 
 [data-scene="detail"] {
@@ -436,11 +457,19 @@ template {
   padding: 5vmin;
 }
 
-.bordered-header::after,
-.bordered-header::before {
+.bordered-title::after,
+.bordered-title::before {
   content: '';
   display: block;
-  border: solid 2px;
+  border: solid 0.5px;
+}
+
+.bordered-title::after {
+  margin-bottom: 1em;
+}
+
+.bordered-title::before {
+  margin-top: 1em;
 }
 
 /* ========================= */
