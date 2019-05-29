@@ -1,0 +1,17 @@
+#app {
+  display: grid;
+  width: 90vw;
+  height: 70vh;
+  background-color: #fff;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  position: relative;
+}
+
+body, html {
+  background-color: #2B2B2B;
+  justify-content: center;
+  align-items: center;
+}

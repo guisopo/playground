@@ -87,8 +87,7 @@ class Smooth {
       w = w + bounds.width
       this.bounds.width = w
       this.bounds.max = this.bounds.width - config.width
-      
-      console.log(el, this.bounds.width, config.width);
+
       if ((this.data.total) === index && elems === this.dom.elems[0]) {
         this.dom.content[0].style.width = `${w}px`
         this.dom.content[1].style.width = `${w}px`
