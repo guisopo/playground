@@ -389,9 +389,11 @@ template {
 @keyframes rotate-wrap {
   from {
     transform: translateY(50vw) rotate(-20deg);
+    opacity: 0;
   }
   to {
     transform: none;
+    opacity: 1;
   }
 }
 
@@ -412,7 +414,33 @@ template {
 /* ========================= */
 
 [data-scene="detail"] {
-  display: none;
+  background: inherit;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+[data-scene="detail"] > figure {
+  flex: 0 0 auto;
+  margin: 0;
+}
+
+[data-scene="detail"] > figure img {
+  width: 300px;
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+[data-scene="detail"] article {
+  padding: 5vmin;
+}
+
+.bordered-header::after,
+.bordered-header::before {
+  content: '';
+  display: block;
+  border: solid 2px;
 }
 
 /* ========================= */
