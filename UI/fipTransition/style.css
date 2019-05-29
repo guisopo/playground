@@ -366,7 +366,6 @@ template {
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
-  overflow-x: auto;
 }
 
 [data-scene="gallery"] > figure {
@@ -384,7 +383,33 @@ template {
 
 .image-wrap {
   overflow: hidden;
+  animation: rotate-wrap 3s cubic-bezier(.5, 0, .5, 1) backwards .4s;
 }
+
+@keyframes rotate-wrap {
+  from {
+    transform: translateY(50vw) rotate(-20deg);
+  }
+  to {
+    transform: none;
+  }
+}
+
+.image-wrap > img {
+  animation: inherit;
+  animation-name: rotate-img;
+}
+
+@keyframes rotate-img {
+  from {
+    transform: scale(1.4) rotate(20deg);
+  }
+  to {
+    transform: none;
+  }
+}
+
+/* ========================= */
 
 [data-scene="detail"] {
   display: none;
