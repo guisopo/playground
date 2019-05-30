@@ -392,15 +392,25 @@ template {
 }
 
 [data-scene="gallery"] > figure img {
-  width: 150px;
+  width: 250px;
   display: block;
   max-width: 100%;
   height: auto;
 }
 
-.image-wrap {
+[data-scene="gallery"] .image-wrap {
   overflow: hidden;
-  animation: rotate-wrap 3s cubic-bezier(.5, 0, .5, 1) backwards .4s;
+  margin-bottom: 5vmin;
+  animation: rotate-wrap 1.5s cubic-bezier(.5, 0, .5, 1);
+}
+
+[data-scene="gallery"] .image-wrap img {
+  filter: saturate(0%); 
+  transition: filter .3s linear;
+}
+
+[data-scene="gallery"] .image-wrap:hover > img {
+  filter: none;
 }
 
 @keyframes rotate-wrap {
