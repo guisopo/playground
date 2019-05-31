@@ -364,8 +364,8 @@ template {
   display: grid;
   width: 100vw;
   height: 100vh;
+  grid-template: 1;
   background-color: #DFDBD2;
-  grid-template: 1 / 1;
 }
 
 [data-state="detail"] [data-scene]:not([data-scene="detail"]) {

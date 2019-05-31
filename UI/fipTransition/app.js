@@ -13,7 +13,7 @@ app.addEventListener('click', () => {
   requestAnimationFrame(() => {
     // LAST
     const nextImg = scene.querySelector('[data-key="img-1"]');
-    const lastRect = bigImg1.getBoundingClientRect();
+    const lastRect = nextImg.getBoundingClientRect();
 
     // INVERT
     const deltaX = firstRect.left - lastRect.left;
