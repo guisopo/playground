@@ -369,11 +369,11 @@ template {
 }
 
 [data-state="detail"] [data-scene]:not([data-scene="detail"]) {
-  display: none;
+  visibility: hidden;
 }
 
 [data-state="gallery"] [data-scene]:not([data-scene="gallery"]) {
-  display: none;
+  visibility: hidden;
 }
 
 .screen {
