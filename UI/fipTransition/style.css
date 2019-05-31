@@ -376,6 +376,12 @@ template {
   visibility: hidden;
 }
 
+[data-state="detail"] [data-scene]:not([data-scene="detail"]) figure {
+  opacity: 0;
+  visibility: visible;
+  transition: opacity .3s;
+}
+
 .screen {
   grid-area: 1 / 1;
 }
