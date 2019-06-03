@@ -362,8 +362,6 @@ body, html {
   align-items: center;
 }
 
-/* ======    Gallery    ====== */
-
 @import url('https://fonts.googleapis.com/css?family=Heebo');
 
 #app {
@@ -386,6 +384,7 @@ body, html {
   visibility: hidden;
 }
 
+/* ======    Gallery    ====== */
 [data-state="detail"] [data-scene]:not([data-scene="detail"]) figure {
   opacity: 0;
   visibility: visible;
@@ -461,7 +460,6 @@ figcaption {
 }
 
 /* ======    Detail    ====== */
-
 [data-scene="detail"] {
   display: flex;
   justify-content: flex-start;  
