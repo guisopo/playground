@@ -349,8 +349,18 @@ template {
 }
 
 /* ========================== */
-/*        Own styles          */
+/*       Custom styles        */
 /* ========================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  position: relative;
+}
+
+body, html {
+  background-color: #2B2B2B;
+  justify-content: center;
+  align-items: center;
+}
 
 /* ======    Gallery    ====== */
 
@@ -515,17 +525,3 @@ figcaption {
 .bordered-title::after {
   margin-top: 1em;
 }
-
-/* ========================= */
-
-*, *::before, *::after {
-  box-sizing: border-box;
-  position: relative;
-}
-
-body, html {
-  background-color: #2B2B2B;
-  justify-content: center;
-  align-items: center;
-}
-
