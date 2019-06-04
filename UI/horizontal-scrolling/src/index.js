@@ -60,11 +60,11 @@ class Smooth {
     const acc = Math.floor(diff / width * 10000) / 10000;
     const velo =+ acc;
 
-    const scale = 1 - Math.abs(velo);
-    const skew = velo * 10;
+    const scale = 1 - Math.abs(velo/1.25);
+    const skew = velo * 20;
     const rotate = velo * 20;
     
-    if (delta < 0) {
+    if (delta <= 0) {
       this.moveX = width;
       delta = 0;
     } else if (delta > width) {
