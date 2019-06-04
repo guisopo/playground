@@ -8,12 +8,6 @@ class Smooth {
 
     this.el = document.querySelector('[data-scroll]');
     this.content = document.querySelector('[data-scroll-content]');
-    
-    this.dom = {
-      el: this.el,
-      content: this.content,
-      elements: [...this.content.querySelectorAll('.js-slide')],
-    }
 
     this.data = {
       current: 0,
@@ -24,6 +18,7 @@ class Smooth {
     this.moveX = 0;
     this.skew = 0;
     this.scale = 0;
+    this.rotate = 0;
 
     this.rAF = null;
 
@@ -31,8 +26,7 @@ class Smooth {
   }
 
   bindAll() {
-    ['wheel', 'run']
-    .forEach( fn => this[fn] = this[fn].bind(this));
+    ['wheel', 'run'].forEach( fn => this[fn] = this[fn].bind(this));
   }
 
   clamp(x, bound) {
@@ -52,18 +46,7 @@ class Smooth {
   run() {
     const width = this.content.getBoundingClientRect().width - window.innerWidth;
     let   delta = (this.content.getBoundingClientRect().width - window.innerWidth) - this.moveX;
-    
-    this.data.last = this.lerp(this.data.last, this.data.current, 0.095);
-    this.data.last = Math.floor(this.data.last * 100) / 100;
-    
-    const diff = this.data.current - this.data.last;
-    const acc = Math.floor(diff / width * 10000) / 10000;
-    const velo =+ acc;
 
-    const scale = 1 - Math.abs(velo/1.25);
-    const skew = velo * 20;
-    const rotate = velo * 20;
-    
     if (delta <= 0) {
       this.moveX = width;
       delta = 0;
@@ -72,16 +55,27 @@ class Smooth {
       delta = width;
     }
 
+    this.data.last = this.lerp(this.data.last, this.data.current, 0.095);
+    this.data.last = Math.floor(this.data.last * 100) / 100;
+    
+    const diff = this.data.current - this.data.last;
+    const acc = Math.floor(diff / width * 10000) / 10000;
+    const velo =+ acc;
+
+    this.scale = 1 - Math.abs(velo/1.25);
+    this.skew = velo * 20;
+    this.rotate = velo * 20;
+
     // SKEW + SCALE OPTION
-    this.content.style.transform = `translate3d(-${this.data.last }px, 0, 0) 
-                                    skewX(${skew}deg)
-                                    scale(${scale})`;
+    this.content.style.transform = `translate3d(-${this.data.last}px, 0, 0) 
+                                    skewX(${this.skew}deg)
+                                    scale(${this.scale})`;
     
     // ROTATE OPTION
     // const transformOr = -(100 - (delta * 100 / width));
     // this.content.style.transformOrigin = `50% ${transformOr}%`;
     // this.content.style.transform = `translate3d(-${this.data.last}px, 0, 0)
-    //                                 rotateY(${rotate}deg)`;
+    //                                 rotateY(${this.rotate}deg)`;
 
     this.requestAnimationFrame();
   }
