@@ -12,14 +12,14 @@ void main() {
   uv -= vec2(0.5, 0.5);
   // 3. Now our coordinates go from 0 - 0.5 and 0 to - 0.5. We want to remap cordinates going from -1 to +1 so we multiply by 2 
   uv *= 2.0;
-  // 3. Set Image aspect to square
+  // 4. Set Image aspect to square
   uv *= u_resolution.xy  / u_resolution.y;
 
   vec3 color = vec3(0.0);
 
-  // Calculate the angle to the current fragement from the center of screen
+  // Calculate the angle to the current fragment from the center of screen
   float angle = atan(-uv.y, uv.x) * 0.1;
-  // distance in UV Space from center of screen to current fragment
+  // Distance in UV Space from center of screen to current fragment
   float length = length(uv);
 
   color.r += sin(length * 40.0 + angle * 40.0 + u_time);
