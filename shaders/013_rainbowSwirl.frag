@@ -9,5 +9,10 @@ void main() {
   vec2 coord = (gl_FragCoord.xy / u_resolution);
   vec3 color = vec3(0.0);
 
-  
+  float angle = atan(-coord.y + 0.25, coord.x - 0.5) * 0.1;
+  float length = length(coord - vec2(0.5, 0.25));
+
+  color += sin(length * 50.0);
+
+  gl_FragColor = vec4(color, 1.0);
 }
