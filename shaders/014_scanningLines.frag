@@ -15,6 +15,10 @@ void main() {
   // 4. Set Image aspect to square
   uv *= u_resolution.xy  / u_resolution.y;
 
-  vec3 color = vec3(0.0);
-  gl_FragColor = vec4(color, 1.0);
+  vec3 color = vec3(1.0);
+
+  float size = 6.0;
+  float alpha = sin(floor(uv.y * size) + u_time * 2.0);
+
+  gl_FragColor = vec4(color, alpha);
 }
