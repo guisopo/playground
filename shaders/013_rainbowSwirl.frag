@@ -18,7 +18,7 @@ void main() {
   vec3 color = vec3(0.0);
 
   // Calculate the angle to the current fragment from the center of screen
-  float angle = atan(-uv.y, uv.x) * 0.1;
+  float angle = atan(uv.y, uv.x) * 0.1;
   // Distance in UV Space from center of screen to current fragment
   float length = length(uv);
 
