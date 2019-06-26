@@ -14,10 +14,6 @@ $yellow:  #FFC001;
   font-weight: 300;
 }
 
-body {
-  padding-top: 200px;
-}
-
 a {
   color: inherit;
   text-decoration: none;
@@ -38,6 +34,7 @@ a {
   top: 0;
   left: 0;
   display: flex;
+  background-color: $white;
 }
 
 .logo {
@@ -63,9 +60,10 @@ nav {
   a {
     color: $grey;
 
-    .active {
-      color: $black;
-    }
+  }
+
+  a.active {
+    color: $black;
   }
 }
 
@@ -94,4 +92,59 @@ nav {
       transform: rotate(180deg);
     }
   }
+}
+
+// Text section
+.column-wrapper {
+  display: flex;
+  height: 100vh;
+
+  section {
+    display: flex;
+  }
+}
+
+.text-section {
+  flex:1;
+  background-color: orange;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 110px;
+
+  h1 {
+    font-size: 95px;
+    width: 450px;
+    padding-bottom: 100px;
+  }
+
+  p {
+    max-width: 380px;
+    line-height: 25px;
+    color: $grey;
+    padding-bottom: 50px;
+  }
+
+  .details-btn {
+    font-weight: 600;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+
+    img {
+      height: 11px;
+      margin-left: 10px;
+    }
+  }
+}
+
+
+
+.image-section {
+  flex:1;
+}
+
+.sidebar-section {
+  width: 115;
+  background: pink;
 }
