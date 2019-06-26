@@ -7,8 +7,6 @@ uniform float u_time;
 
 
 void main() {
-  vec2 coord = 6.0 * gl_FragCoord.xy / u_resolution;
-
   // 1. Normalize UV map going from Zero to One
   vec2 uv = 6.0 * gl_FragCoord.xy / u_resolution;
   // 2. Offset cordinates to center 0.5
