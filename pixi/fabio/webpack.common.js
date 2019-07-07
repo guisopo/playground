@@ -19,7 +19,11 @@ module.exports = {
             outputPath: "images"
           }
         }
-      }
+      },
+      {
+        test: /\.glsl$/,
+        loader: 'webpack-glsl-loader'
+    }
     ]
   }
 }

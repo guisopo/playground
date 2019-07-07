@@ -1,4 +1,5 @@
 import * as PIXI from 'pixi.js'
+import fragment from './shader/fragment.glsl'
 
 const app = new PIXI.Application();
  
