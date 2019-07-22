@@ -13,9 +13,8 @@ class Smooth {
     }
 
     this.winSize = {};
-    this.contentWidth = 0
+    this.contentWidth = 0;
 
-    this.wheelDelta = 0;
     this.moveX = 0;
     
     this.skew = 0;
@@ -28,7 +27,7 @@ class Smooth {
   }
 
   bindAll() {
-    ['wheel', 'run'].forEach( fn => this[fn] = this[fn].bind(this));
+    ['wheel', 'run', 'setBounds'].forEach( fn => this[fn] = this[fn].bind(this));
   }
 
   clamp(x, min, max) {
@@ -36,27 +35,24 @@ class Smooth {
   }
 
   map (x, a, b, c, d) {
-    return (x - a) * (d - c) / (b - a) + c
+    return (x - a) * (d - c) / (b - a) + c;
   } 
 
   lerp (a, b, n) {
-    return (1 - n) * a + n * b
+    return (1 - n) * a + n * b;
   }
 
   wheel(e) {
-    this.wheelDelta  = e.deltaY || e.deltaX;
-    this.moveX += this.wheelDelta;
+    const wheelDelta  = e.deltaY || e.deltaX;
+    this.moveX += wheelDelta;
     this.moveX = this.clamp(this.moveX, 0, this.contentWidth)
   }
 
-  calcWinSize() {
+  setBounds() {
     this.winSize = {
       width: window.innerWidth,
       height: window.innherHeight
-    }
-  }
-
-  setBounds() {
+    };
     this.contentWidth = this.content.clientWidth - this.winSize.width;
   }
 
@@ -89,7 +85,7 @@ class Smooth {
 
   addEvents() {
     window.addEventListener('wheel', this.wheel);
-    window.addEventListener('resize', this.calcWinSize)
+    window.addEventListener('resize', this.setBounds);
   }
   
   requestAnimationFrame() {
@@ -98,9 +94,8 @@ class Smooth {
 
   init() {
     this.bindAll();
-    this.addEvents();
-    this.calcWinSize();
     this.setBounds();
+    this.addEvents();
     this.requestAnimationFrame();
   }
 }
