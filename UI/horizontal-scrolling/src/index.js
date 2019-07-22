@@ -13,12 +13,16 @@ class Smooth {
       last: 0
     }
 
-    this.x = 0;
+    this.winSize = {};
+    this.contentWidth = 0
+
+    this.wheelDelta = 0;
     this.moveX = 0;
+    
     this.skew = 0;
     this.scale = 0;
     this.rotate = 0;
-    this.winSize = {};
+    
     this.rAF = null;
 
     this.init();
@@ -28,18 +32,22 @@ class Smooth {
     ['wheel', 'run'].forEach( fn => this[fn] = this[fn].bind(this));
   }
 
-  clamp(x, bound) {
-    return Math.min(Math.max(x, -bound), bound);
+  clamp(x, min, max) {
+    return Math.min(Math.max(x, min), max);
   }
+
+  map (x, a, b, c, d) {
+    return (x - a) * (d - c) / (b - a) + c
+  } 
 
   lerp (a, b, n) {
     return (1 - n) * a + n * b
   }
 
   wheel(e) {
-    this.x  = e.deltaY || e.deltaX;
-    this.moveX = this.moveX + this.x;
-    this.data.current = this.moveX;
+    this.wheelDelta  = e.deltaY || e.deltaX;
+    this.moveX += this.wheelDelta;
+    this.moveX = this.clamp(this.moveX, 0, this.contentWidth)
   }
 
   calcWinSize() {
@@ -49,23 +57,17 @@ class Smooth {
     }
   }
 
+  setBounds() {
+    this.contentWidth = this.content.clientWidth - this.winSize.width;
+  }
+
   run() {
-    const width = this.content.getBoundingClientRect().width - this.winSize.width;
-    let   delta = (this.content.getBoundingClientRect().width - this.winSize.width) - this.moveX;
-
-    if (delta <= 0) {
-      this.moveX = width;
-      delta = 0;
-    } else if (delta > width) {
-      this.moveX = 0;
-      delta = width;
-    }
-
+    this.data.current = this.moveX;
     this.data.last = this.lerp(this.data.last, this.data.current, 0.095);
     this.data.last = Math.floor(this.data.last * 100) / 100;
     
     const diff = this.data.current - this.data.last;
-    const acc = Math.floor(diff / width * 10000) / 10000;
+    const acc = Math.floor(diff / this.contentWidth * 10000) / 10000;
     const velo =+ acc;
 
     this.scale = 1 - Math.abs(velo/1.25);
@@ -98,6 +100,7 @@ class Smooth {
   init() {
     this.addEvents();
     this.calcWinSize();
+    this.setBounds();
     this.requestAnimationFrame();
   }
 }
