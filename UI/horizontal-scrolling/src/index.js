@@ -6,7 +6,6 @@ class Smooth {
   constructor() {
     this.bindAll();
 
-    this.el = document.querySelector('[data-scroll]');
     this.content = document.querySelector('[data-scroll-content]');
 
     this.data = {
@@ -19,7 +18,7 @@ class Smooth {
     this.skew = 0;
     this.scale = 0;
     this.rotate = 0;
-
+    this.winSize = {};
     this.rAF = null;
 
     this.init();
@@ -43,9 +42,16 @@ class Smooth {
     this.data.current = this.moveX;
   }
 
+  calcWinSize() {
+    this.winSize = {
+      width: window.innerWidth,
+      height: window.innherHeight
+    }
+  }
+
   run() {
-    const width = this.content.getBoundingClientRect().width - window.innerWidth;
-    let   delta = (this.content.getBoundingClientRect().width - window.innerWidth) - this.moveX;
+    const width = this.content.getBoundingClientRect().width - this.winSize.width;
+    let   delta = (this.content.getBoundingClientRect().width - this.winSize.width) - this.moveX;
 
     if (delta <= 0) {
       this.moveX = width;
@@ -82,19 +88,17 @@ class Smooth {
 
   addEvents() {
     window.addEventListener('wheel', this.wheel);
+    window.addEventListener('resize', this.calcWinSize)
   }
   
   requestAnimationFrame() {
     this.rAF = requestAnimationFrame(this.run);
   }
-  
-  on() {
-    this.addEvents();
-    this.requestAnimationFrame();
-  }
 
   init() {
-    this.on();
+    this.addEvents();
+    this.calcWinSize();
+    this.requestAnimationFrame();
   }
 }
 
