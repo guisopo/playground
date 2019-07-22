@@ -4,7 +4,6 @@ import "./main.scss";
 
 class Smooth {
   constructor() {
-    this.bindAll();
 
     this.content = document.querySelector('[data-scroll-content]');
 
@@ -98,6 +97,7 @@ class Smooth {
   }
 
   init() {
+    this.bindAll();
     this.addEvents();
     this.calcWinSize();
     this.setBounds();
