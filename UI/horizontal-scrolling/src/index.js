@@ -2,6 +2,15 @@ import {TweenMax} from "gsap/TweenMax";
 var imagesLoaded = require('imagesloaded');
 import "./main.scss";
 
+// TO-DO
+// 1. Speed is related to the width of the content. Make it independent
+// 2. Move content transform styles boilerplate to constructor
+// 3. Fix transformations calculations
+// 4. Add styles directly in the class
+// 5. Manage image loading through JS
+// 6. Create a class for images to make transforms with them
+
+
 class Smooth {
   constructor(options = {}) {
     this.options = {
