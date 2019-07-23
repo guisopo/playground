@@ -5,7 +5,7 @@ import "./main.scss";
 class Smooth {
   constructor(options = {}) {
     this.options = {
-      content: options.content || document.querySelector('[data-scroll-content]'),
+      content: options.content,
       lerpFactor: options.lerpFactor || 0.095,
       scaleFactor: options.scaleFactor || 1.25,
       skewFactor: options.skewFactor || 20
@@ -16,10 +16,8 @@ class Smooth {
       last: 0
     }
 
-    this.winSize = {};
+    this.windowSize = {};
     this.contentWidth = 0;
-
-    this.moveX = 0;
     
     this.rAF = null;
 
@@ -27,7 +25,8 @@ class Smooth {
   }
 
   bindAll() {
-    ['wheel', 'run', 'setBounds'].forEach( fn => this[fn] = this[fn].bind(this));
+    ['wheel', 'run', 'setBounds']
+      .forEach( fn => this[fn] = this[fn].bind(this));
   }
 
   clamp(x, min, max) {
@@ -44,31 +43,28 @@ class Smooth {
 
   wheel(e) {
     const wheelDelta  = e.deltaY || e.deltaX;
-    this.moveX += wheelDelta;
-    this.moveX = this.clamp(this.moveX, 0, this.contentWidth)
+    this.data.current += wheelDelta;
+    this.data.current = this.clamp(this.data.current, 0, this.contentWidth)
   }
 
   setBounds() {
-    this.winSize = {
+    this.windowSize = {
       width: window.innerWidth,
       height: window.innherHeight
     };
-    this.contentWidth = this.options.content.clientWidth - this.winSize.width;
+    this.contentWidth = this.options.content.clientWidth - this.windowSize.width;
   }
 
   run() {
-    this.data.current = this.moveX;
     this.data.last = this.lerp(this.data.last, this.data.current, this.options.lerpFactor);
     this.data.last = Math.floor(this.data.last * 100) / 100;
     
-    const diff = this.data.current - this.data.last;
+    let diff = this.data.current - this.data.last;
+    // diff = this.clamp(diff, 0, 400)
+    // console.log(diff)
     const acc = Math.floor(diff / this.contentWidth * 10000) / 10000;
-    
-    let velo = 0;
-    velo += acc;
-    
-    // const velo = acc;
-    console.log(velo)
+    console.log(acc)
+    let velo = acc;
 
     const scale = 1 - Math.abs(velo/this.options.scaleFactor);
     const skew = velo * this.options.skewFactor;
@@ -105,4 +101,4 @@ class Smooth {
   }
 }
 
-const smooth = new Smooth();
+const smooth = new Smooth({content: document.querySelector('[data-scroll-content]')});
