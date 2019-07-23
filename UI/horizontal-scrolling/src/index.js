@@ -52,7 +52,7 @@ class Smooth {
       width: window.innerWidth,
       height: window.innherHeight
     };
-    this.contentWidth = this.options.content.clientWidth - this.windowSize.width;
+    this.contentWidth = this.options.content.offsetWidth - this.windowSize.width;
   }
 
   run() {
@@ -61,26 +61,17 @@ class Smooth {
     
     let diff = this.data.current - this.data.last;
     // diff = this.clamp(diff, 0, 400)
-    // console.log(diff)
     const acc = Math.floor(diff / this.contentWidth * 10000) / 10000;
-    console.log(acc)
     let velo = acc;
-
+    
     const scale = 1 - Math.abs(velo/this.options.scaleFactor);
     const skew = velo * this.options.skewFactor;
-    const rotate = velo * this.options.rotateFactor;
 
     // SKEW + SCALE OPTION
     this.options.content.style.transform = `translate3d(-${this.data.last}px, 0, 0) 
                                     skewX(${skew}deg)
                                     scale(${scale})`;
     
-    // ROTATE OPTION
-    // const transformOr = -(100 - (delta * 100 / width));
-    // this.options.content.style.transformOrigin = `50% ${transformOr}%`;
-    // this.options.content.style.transform = `translate3d(-${this.data.last}px, 0, 0)
-    //                                 rotateY(${rotate}deg)`;
-
     this.requestAnimationFrame();
   }
 
