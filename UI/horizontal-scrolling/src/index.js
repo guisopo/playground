@@ -9,6 +9,8 @@ import "./main.scss";
 // 4. Add styles directly in the class
 // 5. Manage image loading through JS
 // 6. Create a class for images to make transforms with them
+// 7. Add destroy method to be able to removeListeners
+// 8. Add vertical option
 
 
 class Smooth {
