@@ -18,9 +18,9 @@ class Smooth {
   constructor(options = {}) {
     this.options = {
       content: options.content,
-      lerpFactor: options.lerpFactor || 0.095,
+      lerpFactor: options.lerpFactor || 0.09,
       scaleFactor: options.scaleFactor || 0.15,
-      skewFactor: options.skewFactor || 3
+      skewFactor: options.skewFactor || 4
     }
 
     this.data = {
@@ -69,33 +69,34 @@ class Smooth {
 
   run() {
     this.data.last = this.lerp(this.data.last, this.data.current, this.options.lerpFactor);
-    this.data.last = Math.floor(this.data.last * 100) / 100;
+    this.data.last = Math.floor(this.data.last* 1000) / 1000;
 
     let scrollingSpeed = this.data.current - this.data.last;
     
-    const scale = 1 - Math.abs(this.map(scrollingSpeed, -1500, 1500, -this.options.scaleFactor, this.options.scaleFactor));
-    const skew = this.map(scrollingSpeed, -1500, 1500, -this.options.skewFactor, this.options.skewFactor);
-
-    this.options.content.style.transform = `translate3d(-${this.data.last}px, 0, 0) 
-                                    skewX(${skew}deg)`;
+    const scale = 1 - Math.abs(Math.floor((this.map(scrollingSpeed, -1500, 1500, -this.options.scaleFactor, this.options.scaleFactor))* 1000) / 1000);
+    const skew = Math.floor(this.map(scrollingSpeed, -1500, 1500, -this.options.skewFactor, this.options.skewFactor));
     
-    this.requestAnimationFrame();
+    this.options.content.style.transform = `translate3d(-${this.data.last}px, 0, 0) 
+                                      skewX(${skew}deg)
+                                      scale(${scale})`;
+    
+    requestAnimationFrame(()=>this.run());
   }
 
   addEvents() {
-    window.addEventListener('wheel', this.wheel);
+    window.addEventListener('wheel', this.wheel, { passive: true });
     window.addEventListener('resize', this.setBounds);
   }
   
-  requestAnimationFrame() {
-    this.rAF = requestAnimationFrame(this.run);
-  }
+  // requestAnimationFrame() {
+  //   this.rAF = c;
+  // }
 
   init() {
     this.bindAll();
     this.setBounds();
     this.addEvents();
-    this.requestAnimationFrame();
+    this.run();
   }
 }
 

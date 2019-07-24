@@ -1,31 +1,44 @@
 import * as PIXI from 'pixi.js'
+import './main.scss'
 import fragment from './shader/fragment.glsl'
 
-const app = new PIXI.Application();
- 
-document.body.appendChild(app.view);
- 
-const container = new PIXI.Container();
-
-app.stage.addChild(container);
-
-const texture = PIXI.Texture.from('./src/images/venice.jpg');
-
-// This creates a texture from a 'bunny.png' image.
-const sprite = new PIXI.Sprite(texture);
-// center the sprite anchor point
-sprite.anchor.set(0.5);
-container.addChild(sprite)
-
-// Move container to the center
-container.x = app.screen.width / 2;
-container.y = app.screen.height / 2;
-
-
-// Listen for frame updates
-app.ticker.add(() => {
-        // each frame we spin the bunny around a bit
-    container.rotation += 0.01;
+const app = new PIXI.Application({
+    width: window.innerWidth, 
+    height: window.innerHeight, 
+    resizeTo: window 
 });
 
+document.body.appendChild(app.view);
+
+let loader =  app.loader;
+loader
+    .add('rome', './src/images/rome.jpg')
+    .add('venice', './src/images/venice.jpg')
+    .add('milano', './src/images/milano.jpg');
+
+let Filter;
+
+loader.load((loader, resources) => {
+    Filter = new PIXI.Filter(null, fragment);
+
+    const texture = new PIXI.Sprite(resources.rome.texture);
+
+    let windowAspect = window.innerWidth/window.innerHeight;
+    let imageAspect = resources.rome.texture.width/resources.rome.texture.height;
+
+    if(windowAspect > imageAspect) {
+        Filter.uniforms.uvAspect ={x:1., y:imageAspect/windowAspect};
+    } else {
+        Filter.uniforms.uvAspect ={x:imageAspect/windowAspect, y:1.};
+    }
+
+    texture.filters = [Filter];
+    
+    Filter.uniforms.uTextureRome = resources.rome.texture;
+
+    app.stage.addChild(texture);
+});
+
+
+const filter = new PIXI.Filter(null, fragment);
 
