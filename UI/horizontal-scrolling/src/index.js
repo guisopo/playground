@@ -12,6 +12,7 @@ import "./main.scss";
 // 7. Create a class for images to make transforms with them
 // 8. Add destroy method to be able to removeListeners
 // 9. Add vertical option
+// 10. RAF just when content is visible
 
 
 class Smooth {
