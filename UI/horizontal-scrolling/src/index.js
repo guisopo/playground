@@ -32,10 +32,18 @@ class Smooth {
     this.scrollingSpeed = 0;
 
     this.animatedStyles = {
+      translate : {
+        previous: 0,
+        current: 0,
+        setValue: () => {
+          this.data.last = this.lerp(this.data.last, this.data.current, this.options.lerpFactor);
+          this.data.last = Math.floor(this.data.last* 1000) / 1000;
+          return this.data.last;
+        }
+      },
       skew : {
         previous: 0,
         current: 0,
-        ease: 0.09,
         setValue: () => {
           return Math.floor(this.map(this.scrollingSpeed, -1500, 1500, -this.options.skewFactor, this.options.skewFactor));
         }
@@ -43,7 +51,6 @@ class Smooth {
       scale : {
         previous: 1,
         current: 0,
-        ease: 0.09,
         setValue: () => {
           return 1 - Math.abs(Math.floor((this.map(this.scrollingSpeed, -1500, 1500, -this.options.scaleFactor, this.options.scaleFactor))* 1000) / 1000);
         }
@@ -90,18 +97,14 @@ class Smooth {
   }
 
   run() {
-    this.data.last = this.lerp(this.data.last, this.data.current, this.options.lerpFactor);
-    this.data.last = Math.floor(this.data.last* 1000) / 1000;
-
     this.scrollingSpeed = this.data.current - this.data.last;
     
-    this.options.content.style.transform = `translate3d(-${this.data.last}px, 0, 0) 
+    this.options.content.style.transform = `translate3d(-${this.animatedStyles.translate.current}px, 0, 0) 
                                       skewX(${this.animatedStyles.skew.current}deg)
                                       scale(${this.animatedStyles.scale.current})`;
 
     for (const key in this.animatedStyles) {
       this.animatedStyles[key].current = this.animatedStyles[key].setValue();
-
     }
     
     requestAnimationFrame(()=>this.run());
