@@ -21,13 +21,34 @@ class Smooth {
       content: options.content,
       lerpFactor: options.lerpFactor || 0.09,
       scaleFactor: options.scaleFactor || 0.15,
-      skewFactor: options.skewFactor || 4
+      skewFactor: options.skewFactor || 4 
     }
 
     this.data = {
       current: 0,
       last: 0
     }
+
+    this.scrollingSpeed = 0;
+
+    this.animatedStyles = {
+      skew : {
+        previous: 0,
+        current: 0,
+        ease: 0.09,
+        setValue: () => {
+          return Math.floor(this.map(this.scrollingSpeed, -1500, 1500, -this.options.skewFactor, this.options.skewFactor));
+        }
+      },
+      scale : {
+        previous: 1,
+        current: 0,
+        ease: 0.09,
+        setValue: () => {
+          return 1 - Math.abs(Math.floor((this.map(this.scrollingSpeed, -1500, 1500, -this.options.scaleFactor, this.options.scaleFactor))* 1000) / 1000);
+        }
+      },
+    };
 
     this.windowSize = {};
     this.contentWidth = 0;
@@ -72,14 +93,16 @@ class Smooth {
     this.data.last = this.lerp(this.data.last, this.data.current, this.options.lerpFactor);
     this.data.last = Math.floor(this.data.last* 1000) / 1000;
 
-    let scrollingSpeed = this.data.current - this.data.last;
-    
-    const scale = 1 - Math.abs(Math.floor((this.map(scrollingSpeed, -1500, 1500, -this.options.scaleFactor, this.options.scaleFactor))* 1000) / 1000);
-    const skew = Math.floor(this.map(scrollingSpeed, -1500, 1500, -this.options.skewFactor, this.options.skewFactor));
+    this.scrollingSpeed = this.data.current - this.data.last;
     
     this.options.content.style.transform = `translate3d(-${this.data.last}px, 0, 0) 
-                                      skewX(${skew}deg)
-                                      scale(${scale})`;
+                                      skewX(${this.animatedStyles.skew.current}deg)
+                                      scale(${this.animatedStyles.scale.current})`;
+
+    for (const key in this.animatedStyles) {
+      this.animatedStyles[key].current = this.animatedStyles[key].setValue();
+
+    }
     
     requestAnimationFrame(()=>this.run());
   }
