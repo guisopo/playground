@@ -19,7 +19,7 @@ class Smooth {
   constructor(options = {}) {
     this.options = {
       content: options.content,
-      lerpFactor: options.lerpFactor || 0.09,
+      lerpFactor: options.lerpFactor || 0.1,
       scaleFactor: options.scaleFactor || 0.15,
       skewFactor: options.skewFactor || 4 
     }
@@ -85,7 +85,6 @@ class Smooth {
   wheel(e) {
     const wheelDelta  = e.deltaY || e.deltaX;
     this.data.current += wheelDelta;
-    this.data.current = this.clamp(this.data.current, 0, this.contentWidth)
   }
 
   setBounds() {
@@ -97,6 +96,7 @@ class Smooth {
   }
 
   run() {
+    this.data.current = this.clamp(this.data.current, 0, this.contentWidth)
     this.scrollingSpeed = this.data.current - this.data.last;
     
     this.options.content.style.transform = `translate3d(-${this.animatedStyles.translate.current}px, 0, 0) 
