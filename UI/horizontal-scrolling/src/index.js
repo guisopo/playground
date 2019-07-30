@@ -28,13 +28,15 @@ class Smooth {
       current: 0,
       last: 0
     }
-
+    this.styles = ''
     this.scrollingSpeed = 0;
 
     this.animatedStyles = {
-      translate : {
+      translateX : {
+        animate: true,
         previous: 0,
         current: 0,
+        setStyle: () => `translate3d(-${this.animatedStyles.translateX.current}px, 0, 0)`,
         setValue: () => {
           this.data.last = this.lerp(this.data.last, this.data.current, this.options.lerpFactor);
           this.data.last = Math.floor(this.data.last* 1000) / 1000;
@@ -42,17 +44,25 @@ class Smooth {
         }
       },
       skew : {
+        animate: true,
         previous: 0,
         current: 0,
+        setStyle: () => `skewX(${this.animatedStyles.skew.current}deg)`,
         setValue: () => {
-          return Math.floor(this.map(this.scrollingSpeed, -1500, 1500, -this.options.skewFactor, this.options.skewFactor));
+          const fromValue = this.options.skewFactor * -1;
+          const toValue = this.options.skewFactor;
+          return Math.floor(this.map(this.scrollingSpeed, -1500, 1500, fromValue, toValue));
         }
       },
       scale : {
+        animate: true,
         previous: 1,
-        current: 0,
+        current: 1,
+        setStyle: () => `scale(${this.animatedStyles.scale.current})`,
         setValue: () => {
-          return 1 - Math.abs(Math.floor((this.map(this.scrollingSpeed, -1500, 1500, -this.options.scaleFactor, this.options.scaleFactor))* 1000) / 1000);
+          const fromValue = this.options.scaleFactor * -1;
+          const toValue = this.options.scaleFactor;
+          return 1 - Math.abs(Math.floor((this.map(this.scrollingSpeed, -1500, 1500, fromValue, toValue))* 1000) / 1000);
         }
       },
     };
@@ -95,19 +105,23 @@ class Smooth {
     this.contentWidth = this.options.content.offsetWidth - this.windowSize.width;
   }
 
+  renderStyles() {
+    return `${this.animatedStyles.translateX.setStyle()} ${this.animatedStyles.skew.setStyle()} ${this.animatedStyles.scale.setStyle()}`
+  }
+
   run() {
     this.data.current = this.clamp(this.data.current, 0, this.contentWidth)
     this.scrollingSpeed = this.data.current - this.data.last;
-    
-    this.options.content.style.transform = `translate3d(-${this.animatedStyles.translate.current}px, 0, 0) 
-                                      skewX(${this.animatedStyles.skew.current}deg)
-                                      scale(${this.animatedStyles.scale.current})`;
+
+    this.options.content.style.transform = this.renderStyles();
 
     for (const key in this.animatedStyles) {
-      this.animatedStyles[key].current = this.animatedStyles[key].setValue();
+      if(this.animatedStyles[key].animate) {
+        this.animatedStyles[key].current = this.animatedStyles[key].setValue();
+      }
     }
     
-    requestAnimationFrame(()=>this.run());
+    requestAnimationFrame(() => this.run());
   }
 
   addEvents() {
