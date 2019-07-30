@@ -15,7 +15,7 @@ import "./main.scss";
 // 10. RAF just when content is visible
 
 
-class Smooth {
+class SweetScroll {
   constructor(options = {}) {
     this.options = {
       content: options.content,
@@ -140,4 +140,4 @@ class Smooth {
   }
 }
 
-const smooth = new SmoothScroll({content: document.querySelector('[data-scroll-content]')});
+const smooth = new SweetScroll({content: document.querySelector('[data-scroll-content]')});
