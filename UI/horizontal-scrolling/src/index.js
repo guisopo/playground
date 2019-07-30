@@ -1,13 +1,13 @@
-import {TweenMax} from "gsap/TweenMax";
-var imagesLoaded = require('imagesloaded');
+// import {TweenMax} from "gsap/TweenMax";
+// var imagesLoaded = require('imagesloaded');
 import "./main.scss";
 
 // TO-DO
-// 1. Speed is related to the width of the content. Make it independent
-// 2. Move content transform styles boilerplate to constructor
-// 3. Fix transformations calculations
-// 4. Fix wheelY bug
-// 5. Add styles directly in the class
+// 1. Speed is relative to the width of the content. Make it independent
+// 2. DONE------Move content transform styles boilerplate to constructor
+// 3. Fix transformations calculations (1500)
+// 4. DONE------Fix wheelY bug
+// 5. Add content styles directly in the class
 // 6. Manage image loading through JS
 // 7. Create a class for images to make transforms with them
 // 8. Add destroy method to be able to removeListeners
@@ -28,11 +28,12 @@ class Smooth {
       current: 0,
       last: 0
     }
-    this.styles = ''
+
+    this.renderedStyles = ''
     this.scrollingSpeed = 0;
 
     this.animatedStyles = {
-      translateX : {
+      translateX: {
         animate: true,
         previous: 0,
         current: 0,
@@ -43,18 +44,18 @@ class Smooth {
           return this.data.last;
         }
       },
-      skew : {
+      skewX: {
         animate: true,
         previous: 0,
         current: 0,
-        setStyle: () => `skewX(${this.animatedStyles.skew.current}deg)`,
+        setStyle: () => `skewX(${this.animatedStyles.skewX.current}deg)`,
         setValue: () => {
           const fromValue = this.options.skewFactor * -1;
           const toValue = this.options.skewFactor;
           return Math.floor(this.map(this.scrollingSpeed, -1500, 1500, fromValue, toValue));
         }
       },
-      scale : {
+      scale: {
         animate: true,
         previous: 1,
         current: 1,
@@ -70,6 +71,8 @@ class Smooth {
     this.windowSize = {};
     this.contentWidth = 0;
     
+    this.styles = '';
+
     this.rAF = null;
 
     this.init();
@@ -105,20 +108,16 @@ class Smooth {
     this.contentWidth = this.options.content.offsetWidth - this.windowSize.width;
   }
 
-  renderStyles() {
-    return `${this.animatedStyles.translateX.setStyle()} ${this.animatedStyles.skew.setStyle()} ${this.animatedStyles.scale.setStyle()}`
-  }
-
   run() {
     this.data.current = this.clamp(this.data.current, 0, this.contentWidth)
     this.scrollingSpeed = this.data.current - this.data.last;
-
-    this.options.content.style.transform = this.renderStyles();
-
+    
+    this.options.content.style.transform = this.styles;
+    
+    this.styles = '';
     for (const key in this.animatedStyles) {
-      if(this.animatedStyles[key].animate) {
-        this.animatedStyles[key].current = this.animatedStyles[key].setValue();
-      }
+      this.styles += this.animatedStyles[key].setStyle();
+      this.animatedStyles[key].current = this.animatedStyles[key].setValue();
     }
     
     requestAnimationFrame(() => this.run());
@@ -128,7 +127,7 @@ class Smooth {
     window.addEventListener('wheel', this.wheel, { passive: true });
     window.addEventListener('resize', this.setBounds);
   }
-  
+
   // requestAnimationFrame() {
   //   this.rAF = c;
   // }
@@ -141,4 +140,4 @@ class Smooth {
   }
 }
 
-const smooth = new Smooth({content: document.querySelector('[data-scroll-content]')});
+const smooth = new SmoothScroll({content: document.querySelector('[data-scroll-content]')});
