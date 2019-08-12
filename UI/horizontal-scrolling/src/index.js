@@ -80,7 +80,7 @@ class SweetScroll {
   }
 
   bindAll() {
-    ['wheel', 'run', 'setBounds']
+    ['wheel', 'run', 'setBounds', 'async']
       .forEach( fn => this[fn] = this[fn].bind(this));
   }
 
