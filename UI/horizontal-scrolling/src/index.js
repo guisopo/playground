@@ -1,5 +1,6 @@
 // import {TweenMax} from "gsap/TweenMax";
 // var imagesLoaded = require('imagesloaded');
+import fastdom from "fastdom"
 import "./main.scss";
 
 // TO-DO
@@ -123,8 +124,33 @@ class SweetScroll {
     requestAnimationFrame(() => this.run());
   }
 
+  async() {
+    fastdom.measure(function() {
+
+      this.windowSize = {
+        width: window.innerWidth,
+        height: window.innherHeight
+      };
+
+      this.contentWidth = this.options.content.offsetWidth - this.windowSize.width;
+
+      fastdom.mutate(function() {
+        this.data.current = this.clamp(this.data.current, 0, this.contentWidth)
+        this.scrollingSpeed = this.data.current - this.data.last;
+        
+        this.options.content.style.transform = this.styles;
+        this.styles = '';
+        for (const key in this.animatedStyles) {
+          this.styles += this.animatedStyles[key].setStyle();
+          this.animatedStyles[key].current = this.animatedStyles[key].setValue();
+        }
+      })
+    });
+    window.requestAnimationFrame(() => this.run());
+  }
+
   addEvents() {
-    window.addEventListener('wheel', this.wheel, { passive: true });
+    window.addEventListener('wheel', this.wheel, { capture: false, passive: true });
     window.addEventListener('resize', this.setBounds);
   }
 
@@ -136,7 +162,7 @@ class SweetScroll {
     this.bindAll();
     this.setBounds();
     this.addEvents();
-    this.run();
+    this.async();
   }
 }
 
