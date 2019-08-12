@@ -28,6 +28,7 @@
     "webpack-merge": "^4.2.1"
   },
   "dependencies": {
+    "fastdom": "^1.0.9",
     "gsap": "^2.1.2",
     "imagesloaded": "^4.1.4",
     "normalize.css": "^8.0.1"
