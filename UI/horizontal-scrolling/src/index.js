@@ -109,21 +109,6 @@ class SweetScroll {
     this.contentWidth = this.options.content.offsetWidth - this.windowSize.width;
   }
 
-  run() {
-    this.data.current = this.clamp(this.data.current, 0, this.contentWidth)
-    this.scrollingSpeed = this.data.current - this.data.last;
-    
-    this.options.content.style.transform = this.styles;
-    
-    this.styles = '';
-    for (const key in this.animatedStyles) {
-      this.styles += this.animatedStyles[key].setStyle();
-      this.animatedStyles[key].current = this.animatedStyles[key].setValue();
-    }
-    
-    requestAnimationFrame(() => this.run());
-  }
-
   async() {
     fastdom.measure(() => {
 
