@@ -125,7 +125,7 @@ class SweetScroll {
   }
 
   async() {
-    fastdom.measure(function() {
+    fastdom.measure(() => {
 
       this.windowSize = {
         width: window.innerWidth,
@@ -134,7 +134,7 @@ class SweetScroll {
 
       this.contentWidth = this.options.content.offsetWidth - this.windowSize.width;
 
-      fastdom.mutate(function() {
+      fastdom.mutate(() => {
         this.data.current = this.clamp(this.data.current, 0, this.contentWidth)
         this.scrollingSpeed = this.data.current - this.data.last;
         
