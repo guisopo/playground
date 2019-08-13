@@ -80,7 +80,7 @@ class SweetScroll {
   }
 
   bindAll() {
-    ['wheel', 'run', 'setBounds', 'async']
+    ['wheel', 'setBounds', 'async']
       .forEach( fn => this[fn] = this[fn].bind(this));
   }
 
@@ -146,7 +146,7 @@ class SweetScroll {
         }
       })
     });
-    window.requestAnimationFrame(() => this.run());
+    window.requestAnimationFrame(() => this.async());
   }
 
   addEvents() {
