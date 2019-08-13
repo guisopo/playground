@@ -1,5 +1,6 @@
 //================
-//  GENERAL
+//  TYPO
+
 @import "../node_modules/normalize.css/normalize.css";
 @font-face {
   font-family: 'font';
@@ -8,6 +9,10 @@
   font-weight: normal;
   font-style: normal;
 }
+
+//================
+//  SETUP
+
 html {
   overscroll-behavior: none;
 }
