@@ -40,7 +40,7 @@ class SweetScroll {
         setStyle: () => `translate3d(-${this.animatedStyles.translateX.current}px, 0, 0)`,
         setValue: () => {
           this.data.last = this.lerp(this.data.last, this.data.current, this.options.lerpFactor);
-          this.data.last = Math.floor(this.data.last* 1000) / 1000;
+          this.data.last = Math.floor(this.data.last * 1000) / 1000;
           return this.data.last;
         }
       },
@@ -63,7 +63,7 @@ class SweetScroll {
         setValue: () => {
           const fromValue = this.options.scaleFactor * -1;
           const toValue = this.options.scaleFactor;
-          return 1 - Math.abs(Math.floor((this.map(this.scrollingSpeed, -1500, 1500, fromValue, toValue))* 1000) / 1000);
+          return 1 - Math.abs(Math.floor((this.map(this.scrollingSpeed, -1500, 1500, fromValue, toValue)) * 1000) / 1000);
         }
       },
     };
@@ -72,8 +72,6 @@ class SweetScroll {
     this.contentWidth = 0;
     
     this.styles = '';
-
-    this.rAF = null;
 
     this.init();
   }
@@ -127,10 +125,6 @@ class SweetScroll {
     window.addEventListener('wheel', this.wheel, { passive: true });
     window.addEventListener('resize', this.setBounds);
   }
-
-  // requestAnimationFrame() {
-  //   this.rAF = c;
-  // }
 
   init() {
     this.bindAll();
