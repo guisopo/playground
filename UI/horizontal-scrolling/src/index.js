@@ -44,11 +44,33 @@ class SweetScroll {
           return this.data.last;
         }
       },
+      translateY: {
+        animate: false,
+        previous: 0,
+        current: 0,
+        setStyle: () => `translate3d(0, -${this.animatedStyles.translateX.current}px, 0)`,
+        setValue: () => {
+          this.data.last = this.lerp(this.data.last, this.data.current, this.options.lerpFactor);
+          this.data.last = Math.floor(this.data.last * 1000) / 1000;
+          return this.data.last;
+        }
+      },
       skewX: {
         animate: true,
         previous: 0,
         current: 0,
         setStyle: () => `skewX(${this.animatedStyles.skewX.current}deg)`,
+        setValue: () => {
+          const fromValue = this.options.skewFactor * -1;
+          const toValue = this.options.skewFactor;
+          return Math.floor(this.map(this.scrollingSpeed, -1500, 1500, fromValue, toValue));
+        }
+      },
+      skewY: {
+        animate: false,
+        previous: 0,
+        current: 0,
+        setStyle: () => `skewY(${this.animatedStyles.skewX.current}deg)`,
         setValue: () => {
           const fromValue = this.options.skewFactor * -1;
           const toValue = this.options.skewFactor;
@@ -72,7 +94,6 @@ class SweetScroll {
     this.contentWidth = 0;
     
     this.styles = '';
-
     this.init();
   }
 
@@ -113,9 +134,12 @@ class SweetScroll {
     this.options.content.style.transform = this.styles;
     
     this.styles = '';
+    
     for (const key in this.animatedStyles) {
-      this.styles += this.animatedStyles[key].setStyle();
-      this.animatedStyles[key].current = this.animatedStyles[key].setValue();
+      if(this.animatedStyles[key].animate) {
+        this.styles += this.animatedStyles[key].setStyle();
+        this.animatedStyles[key].current = this.animatedStyles[key].setValue();
+      }
     }
     
     requestAnimationFrame(() => this.run());
