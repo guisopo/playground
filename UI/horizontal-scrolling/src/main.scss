@@ -4,6 +4,7 @@
 
 :root {
   --aspect-ratio: 3/2;
+  --calc-aspect-ratio: calc(100% * 1/(var(--aspect-ratio)));
 }
 
 html {
@@ -25,7 +26,6 @@ figure {
 
 main {
 
-  scrollbar-width: none;
   .scroll {
     position: absolute;
     display: flex;
@@ -53,7 +53,7 @@ main {
         position: relative;
         height: 0;
         width: 100%;
-        padding-top: calc(100% * 1/(var(--aspect-ratio)));
+        padding-top: var(--calc-aspect-ratio);
         overflow: hidden;
 
         img {
