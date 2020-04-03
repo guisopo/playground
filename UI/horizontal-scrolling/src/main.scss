@@ -2,55 +2,69 @@
   box-sizing: border-box;
 }
 
-figure {
-  margin: 0;
-  padding: 0;
+:root {
+  --aspect-ratio: 3/2;
+}
+
+html {
+  // To hide scrollbar in Firefox and make slider work in Safari
+  overflow: hidden;
 }
 
 body {
   background-color: #000000;
   font-family: 'Helvetica Neue', 'Helvetica', sans-serif;
   overflow-y: scroll;
+  overscroll-behavior: none;
 }
 
-.scroll {
-  position: absolute;
-  display: flex;
-  height: 100vh;
-  user-select: none;
-  cursor: grab;
+figure {
+  margin: 0;
+  padding: 0;
+}
 
-  .slide {
-    height: 100%;
-    width: 50vw;
-    padding: 20vh 0;
+main {
+
+  scrollbar-width: none;
+  .scroll {
+    position: absolute;
     display: flex;
+    height: 100vh;
+    user-select: none;
+    cursor: grab;
 
-    &__inner {
-      width: 100%;
-      padding-left: 15vw;
+    .slide {
+      height: 100%;
+      width: 50vw;
+      padding: 20vh 0;
+      display: flex;
 
-    }
-
-    &:nth-of-type(even) {
-      align-items: flex-end;
-    }
-
-    &__figure {
-      position: relative;
-      height: 0;
-      width: 100%;
-      padding-top: 65%;
-      overflow: hidden;
-
-      img {
-        display: block;
-        position: absolute;
+      &__inner {
         width: 100%;
-        height: 100%;
-        top: 0;
-        right: 0;
-        object-fit: cover;
+        padding-left: 15vw;
+
+      }
+
+      &:nth-of-type(even) {
+        align-items: flex-end;
+      }
+
+      &__figure {
+        position: relative;
+        height: 0;
+        width: 100%;
+        padding-top: calc(100% * 1/(var(--aspect-ratio)));
+        overflow: hidden;
+
+        img {
+          display: block;
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          top: 0;
+          right: 0;
+          object-fit: cover;
+        }
       }
     }
   }
