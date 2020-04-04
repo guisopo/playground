@@ -2,8 +2,6 @@ require('normalize.css');
 import "./main.scss";
 
 // [].forEach.call(document.querySelectorAll("*"),function(a){a.style.outline="1px solid #"+(~~(Math.random()*(1<<24))).toString(16)})
-const clamp = (x, min, max) => Math.min(Math.max(x, min), max);
-const lerp = (a, b, n) => (1 - n) * a + n * b;
 
 class SweetScroll {
   constructor(slider) {
@@ -28,12 +26,12 @@ class SweetScroll {
           return this.data.last;
         }
       },
-      scale: {
+      scaleY: {
         previous: 1,
         current: 1,
-        setStyle: () => `scaleY(${this.renderStyles.scale.current})`,
+        setStyle: () => `scaleY(${this.renderStyles.scaleY.current})`,
         setValue: () => {
-          return 1 - (clamp(Math.abs(this.data.scrollingSpeed), 0, 30)/100) * 2;
+          return 1 - (this.clamp(Math.abs(this.data.scrollingSpeed), 0, 30)/100) * 2;
         }
       }
     }
@@ -44,12 +42,13 @@ class SweetScroll {
   init() {
     this.bindAll();
     this.setBounds();
+    this.setInitialStyles();
     this.addEvents();
     this.run();
   }
 
   bindAll() {
-    ['setBounds', 'addEvents', 'wheel', 'run']
+    ['setBounds', 'setInitialStyles', 'addEvents', 'wheel', 'run']
       .forEach( fn => this[fn] = this[fn].bind(this));
   }
 
@@ -62,6 +61,10 @@ class SweetScroll {
     this.offsetWidth = this.slider.offsetWidth - this.windowSize.width;
   }
 
+  setInitialStyles() {
+    this.slider.style.willChange = 'transform';
+  }
+
   addEvents() {
     this.slider.addEventListener('wheel', this.wheel, { passive: true });
     window.addEventListener('resize', this.setBounds);
@@ -70,16 +73,15 @@ class SweetScroll {
   wheel(e) {
     const wheelDelta  = e.deltaY || e.deltaX;
     this.data.current += wheelDelta;
-    this.data.current = clamp(this.data.current, 0, this.offsetWidth);
+    this.data.current = this.clamp(this.data.current, 0, this.offsetWidth);
   }
 
   calculateSpeed() {
-    this.data.current = clamp(this.data.current, 0, this.offsetWidth);
-
-    this.data.last = lerp(this.data.last, this.data.current, this.lerpFactor);
+    this.data.last = this.lerp(this.data.last, this.data.current, this.lerpFactor);
     this.data.last = Math.floor(this.data.last * 10000) / 10000;
 
     this.data.scrollingSpeed = Math.floor(this.data.current - this.data.last) / 100;
+    console.log(this.data.scrollingSpeed);
   }
 
   run() {
@@ -95,6 +97,14 @@ class SweetScroll {
     
     requestAnimationFrame(() => this.run());
   }
+
+  clamp (x, min, max) {
+    return Math.min(Math.max(x, min), max);
+  }
+
+  lerp (a, b, n) {
+    return (1 - n) * a + n * b;
+  } 
 }
 
 const slider = document.querySelector('.scroll');
