@@ -24,14 +24,16 @@ figure {
   padding: 0;
 }
 
+a {
+  display: block;
+}
+
 main {
 
   .scroll {
     position: absolute;
     display: flex;
     height: 100vh;
-    user-select: none;
-    cursor: grab;
 
     .slide {
       height: 100%;
@@ -55,6 +57,7 @@ main {
         width: 100%;
         padding-top: var(--calc-aspect-ratio);
         overflow: hidden;
+        background-color: #ffffff;
 
         img {
           display: block;
