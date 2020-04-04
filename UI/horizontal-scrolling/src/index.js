@@ -63,6 +63,8 @@ class SweetScroll {
 
   setInitialStyles() {
     this.slider.style.willChange = 'transform';
+    this.slider.style.userSelect = 'none';
+    this.slider.style.cursor = 'grab';
   }
 
   addEvents() {
