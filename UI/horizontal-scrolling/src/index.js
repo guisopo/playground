@@ -3,6 +3,13 @@ import "./main.scss";
 
 // [].forEach.call(document.querySelectorAll("*"),function(a){a.style.outline="1px solid #"+(~~(Math.random()*(1<<24))).toString(16)})
 
+// TO DO
+// 1. Add touch to yout site
+// 2. Load Images when scrolling
+// 3. Lasse Pedersen
+// 4. Add custom pointer that reacts when click
+// 5. Add parallax
+
 class SweetScroll {
   constructor(slider) {
     this.slider = slider;
@@ -83,7 +90,6 @@ class SweetScroll {
     this.data.last = Math.floor(this.data.last * 10000) / 10000;
 
     this.data.scrollingSpeed = Math.floor(this.data.current - this.data.last) / 100;
-    console.log(this.data.scrollingSpeed);
   }
 
   run() {
