@@ -20,9 +20,15 @@ class SweetScroll {
     this.offsetWidth = 0;
     this.lerpFactor = 0.1;
 
+    this.dragSpeed = 5;
+    this.rafPending = false;
+    this.isDragging = false;
+
     this.data = {
       current: 0,
       last: 0,
+      mouseDown: 0,
+      mouseUp: 0,
       scrollingSpeed: 0
     };
 
@@ -57,7 +63,7 @@ class SweetScroll {
   }
 
   bindAll() {
-    ['setBounds', 'setInitialStyles', 'addEvents', 'wheel', 'run']
+    ['setBounds', 'setInitialStyles', 'addEvents', 'wheel', 'run', 'drag', 'handleGestureStart', 'handleGestureMove', 'handleGestureEnd', 'getGesturePointFromEvent']
       .forEach( fn => this[fn] = this[fn].bind(this));
   }
 
@@ -77,6 +83,24 @@ class SweetScroll {
   }
 
   addEvents() {
+    // Check if pointer events are supported.
+    if (window.PointerEvent) {
+      // Add Pointer Event Listener
+      this.slider.addEventListener('pointerdown', this.handleGestureStart, true);
+      this.slider.addEventListener('pointermove', this.handleGestureMove, true);
+      this.slider.addEventListener('pointerup', this.handleGestureEnd, true);
+      this.slider.addEventListener('pointercancel', this.handleGestureEnd, true);
+    } else {
+      // Add Touch Listener
+      this.slider.addEventListener('touchstart', this.handleGestureStart, true);
+      this.slider.addEventListener('touchmove', this.handleGestureMove, true);
+      this.slider.addEventListener('touchend', this.handleGestureEnd, true);
+      this.slider.addEventListener('touchcancel', this.handleGestureEnd, true);
+
+      // Add Mouse Listener
+      this.slider.addEventListener('mousedown', this.handleGestureStart, true);
+    }
+
     this.slider.addEventListener('wheel', this.wheel, { passive: true });
     window.addEventListener('resize', this.setBounds);
   }
@@ -85,6 +109,101 @@ class SweetScroll {
     const wheelDelta  = e.deltaY || e.deltaX;
     this.data.current += wheelDelta;
     this.data.current = this.clamp(this.data.current, 0, this.offsetWidth);
+  }
+
+  drag(e) {
+    e.preventDefault();
+
+    // this.data.current = this.data.mouseUp - ((e.clientX - this.data.mouseDown) * this.options.dragSpeed);
+    this.data.current = this.lastTouchPos - ((e.clientX - this.initialTouchPos.x) * this.dragSpeed);
+  }
+
+  getGesturePointFromEvent(e) {
+    // this.isDragging = true;
+    // this.data.mouseDown = e.clientX ;
+    // this.data.mouseUp = this.data.current;
+  
+    const point = {};
+
+    if(e.targetTouches) {
+      // Prefer Touch Events
+      point.x = e.targetTouches[0].clientX;
+      point.y = e.targetTouches[0].clientY;
+    } else {
+      // Either Mouse event or Pointer Event
+      point.x = e.clientX;
+      point.y = e.clientY;
+    }
+
+    return point;
+  }
+
+  handleGestureStart(e) {
+    e.preventDefault();
+
+    this.slider.removeEventListener( 'wheel', this.wheel, { passive: true });
+
+    if(e.touches && e.touches.length > 1) {
+      return;
+    }
+
+    this.rafPending = false;
+
+    // Add the move and end listeners
+    if (window.PointerEvent) {
+      e.target.setPointerCapture(e.pointerId);
+    } else {
+      // Add Mouse Listeners
+      document.addEventListener('mousemove', this.handleGestureMove, true);
+      document.addEventListener('mouseup', this.handleGestureEnd, true);
+    }
+
+    this.initialTouchPos = this.getGesturePointFromEvent(e);
+    this.lastTouchPos = this.data.current;
+
+    this.options.content.style.transition = 'initial';
+  }
+
+  handleGestureMove(e) {
+    e.preventDefault();
+
+    // if(!this.isDragging) return;
+    // this.options.content.classList.add("dragged");
+  
+    if(!this.initialTouchPos) {
+      return;
+    }
+  
+    this.drag(e);
+  }
+
+  handleGestureEnd(e) {
+    e.preventDefault();
+
+    // this.isDragging = false;
+    // this.options.content.classList.remove("dragged");
+    // this.data.mouseUp = this.data.current;
+    this.slider.addEventListener('wheel', this.wheel, { passive: true });
+    this.lastTouchPos = this.data.current;
+
+    if(e.touches && e.touches.length > 0) {
+      return;
+    }
+  
+    this.rafPending = false;
+  
+    // Remove Event Listeners
+    if (window.PointerEvent) {
+      e.target.releasePointerCapture(e.pointerId);
+    } else {
+      // Remove Mouse Listeners
+      document.removeEventListener('mousemove', this.handleGestureMove, true);
+      document.removeEventListener('mouseup', this.handleGestureEnd, true);
+    }
+  
+    // updateSwipeRestPosition();
+  
+    this.initialTouchPos = null;
   }
 
   calculateSpeed() {
