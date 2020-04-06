@@ -4,11 +4,13 @@ import "./main.scss";
 // [].forEach.call(document.querySelectorAll("*"),function(a){a.style.outline="1px solid #"+(~~(Math.random()*(1<<24))).toString(16)})
 
 // TO DO
-// 1. Add touch to yout site
-// 2. Load Images when scrolling
-// 3. Lasse Pedersen
-// 4. Add custom pointer that reacts when click
-// 5. Add parallax
+//  1. Add touch to yout site
+//  2. Load Images when scrolling
+//  3. Lasse Pedersen / gavkag
+//  4. Add custom pointer that reacts when click
+//  5. Add parallax
+//  6. Make vertical
+//  7. Do it with pixi.js
 
 class SweetScroll {
   constructor(slider) {
@@ -93,9 +95,9 @@ class SweetScroll {
   }
 
   run() {
-    this.calculateSpeed();
-    
     this.slider.style.transform = this.styles;
+    
+    this.calculateSpeed();
 
     this.styles = '';
     for (const key in this.renderStyles) {
