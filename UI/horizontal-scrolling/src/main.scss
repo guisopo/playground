@@ -22,6 +22,7 @@ body {
 figure {
   margin: 0;
   padding: 0;
+  clip-path: inset(0 0 0 0);
 }
 
 a {
@@ -58,6 +59,11 @@ main {
         padding-top: var(--calc-aspect-ratio);
         overflow: hidden;
         background-color: #ffffff;
+        // transition: clip-path 0.75s cubic-bezier(0,1.08,.59,.99);
+
+        // &:hover {
+        //   clip-path: inset(30px 30px 30px 30px);
+        // }
 
         img {
           display: block;
