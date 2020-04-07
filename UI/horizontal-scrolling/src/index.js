@@ -12,6 +12,7 @@ import "./main.scss";
 //  6. Make vertical
 //  7. Do it with pixi.js
 //  8. Change drag variables naming to more clear ones
+//  9. Make infinte gallery
 
 class SweetScroll {
   constructor(slider) {
