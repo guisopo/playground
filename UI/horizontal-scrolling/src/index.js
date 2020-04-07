@@ -4,13 +4,14 @@ import "./main.scss";
 // [].forEach.call(document.querySelectorAll("*"),function(a){a.style.outline="1px solid #"+(~~(Math.random()*(1<<24))).toString(16)})
 
 // TO DO
-//  1. Add touch to yout site
+//  1. DONE Add touch to yout site
 //  2. Load Images when scrolling
 //  3. Lasse Pedersen / gavkag
 //  4. Add custom pointer that reacts when click
 //  5. Add parallax
 //  6. Make vertical
 //  7. Do it with pixi.js
+//  8. Change drag variables naming to more clear ones
 
 class SweetScroll {
   constructor(slider) {
@@ -22,8 +23,9 @@ class SweetScroll {
     this.lerpFactor = 0.1;
 
     this.dragSpeed = 5;
-    this.initialTouchPos;
-    this.lastTouchPos;
+    this.initialTouchPos = null;
+    this.initialSliderOffset = null;
+    
     this.rafPending = false;
     this.isDragging = false;
 
@@ -113,16 +115,11 @@ class SweetScroll {
 
   drag(e) {
     e.preventDefault();
-
     // this.data.current = this.data.mouseUp - ((e.clientX - this.data.mouseDown) * this.options.dragSpeed);
-    this.data.current = this.lastTouchPos - ((e.clientX - this.initialTouchPos.x) * this.dragSpeed);
+    this.data.current = this.initialSliderOffset - ((e.clientX - this.initialTouchPos.x) * this.dragSpeed);
   }
 
   getGesturePointFromEvent(e) {
-    // this.isDragging = true;
-    // this.data.mouseDown = e.clientX ;
-    // this.data.mouseUp = this.data.current;
-  
     const point = {};
 
     if(e.targetTouches) {
@@ -161,20 +158,16 @@ class SweetScroll {
     }
 
     this.initialTouchPos = this.getGesturePointFromEvent(e);
-    this.lastTouchPos = this.data.current;
+    this.initialSliderOffset = this.data.current;
 
     this.slider.style.transition = 'initial';
+    this.isDragging = true;
   }
 
   handleGestureMove(e) {
     e.preventDefault();
 
-    // if(!this.isDragging) return;
-    // this.options.content.classList.add("dragged");
-  
-    if(!this.initialTouchPos) {
-      return;
-    }
+    if(!this.isDragging || !this.initialTouchPos) return;
   
     this.drag(e);
   }
@@ -182,11 +175,9 @@ class SweetScroll {
   handleGestureEnd(e) {
     e.preventDefault();
 
-    // this.isDragging = false;
-    // this.options.content.classList.remove("dragged");
-    // this.data.mouseUp = this.data.current;
+    this.isDragging = false;
+
     this.slider.addEventListener('wheel', this.wheel, { passive: true });
-    this.lastTouchPos = this.data.current;
 
     if(e.touches && e.touches.length > 0) {
       return;
@@ -202,10 +193,9 @@ class SweetScroll {
       document.removeEventListener('mousemove', this.handleGestureMove, true);
       document.removeEventListener('mouseup', this.handleGestureEnd, true);
     }
-  
-    // updateSwipeRestPosition();
-  
+    
     this.initialTouchPos = null;
+    this.initialSliderOffset = this.data.current;
   }
 
   calculateScrollingSpeed() {
@@ -228,10 +218,10 @@ class SweetScroll {
     for (const key in this.renderStyles) {
       // Add styles to style property
       this.styles += this.renderStyles[key].setStyle();
-      // Calculate styles
+      // Calculate style
       this.renderStyles[key].current = this.renderStyles[key].setValue();
     }
-    
+
     requestAnimationFrame(() => this.run());
   }
 
