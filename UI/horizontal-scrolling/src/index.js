@@ -53,8 +53,6 @@ class SweetScroll {
         }
       }
     }
-
-    this.init();
   }
 
   init() {
@@ -248,3 +246,4 @@ class SweetScroll {
 
 const slider = document.querySelector('.scroll');
 const sweetSlider = new SweetScroll(slider);
+sweetSlider.init();
