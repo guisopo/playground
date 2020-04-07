@@ -15,6 +15,7 @@ import "./main.scss";
 class SweetScroll {
   constructor(slider) {
     this.slider = slider;
+    this.styles = '';
 
     this.windowSize = {};
     this.offsetWidth = 0;
@@ -217,15 +218,21 @@ class SweetScroll {
   }
 
   run() {
+    // Clamp between 0 and slider width
     this.data.current = this.clamp(this.data.current, 0, this.offsetWidth);
     
+    // Apply styles to slider
     this.slider.style.transform = this.styles;
     
     this.calculateSpeed();
 
+    // Reset style property
     this.styles = '';
+    
     for (const key in this.renderStyles) {
+      // Add styles to style property
       this.styles += this.renderStyles[key].setStyle();
+      // Calculate styles
       this.renderStyles[key].current = this.renderStyles[key].setValue();
     }
     
