@@ -21,6 +21,8 @@ class SweetScroll {
     this.lerpFactor = 0.1;
 
     this.dragSpeed = 5;
+    this.initialTouchPos;
+    this.lastTouchPos;
     this.rafPending = false;
     this.isDragging = false;
 
@@ -108,7 +110,6 @@ class SweetScroll {
   wheel(e) {
     const wheelDelta  = e.deltaY || e.deltaX;
     this.data.current += wheelDelta;
-    this.data.current = this.clamp(this.data.current, 0, this.offsetWidth);
   }
 
   drag(e) {
@@ -151,6 +152,8 @@ class SweetScroll {
 
     // Add the move and end listeners
     if (window.PointerEvent) {
+      // Allows events for a particular pointer event to be re-targeted to an element instead of the normal target at a pointer's location. 
+      // Used to ensure that an element continues to receive pointer events even if the pointer device's contact moves off the element (such as by scrolling or panning).
       e.target.setPointerCapture(e.pointerId);
     } else {
       // Add Mouse Listeners
@@ -161,7 +164,7 @@ class SweetScroll {
     this.initialTouchPos = this.getGesturePointFromEvent(e);
     this.lastTouchPos = this.data.current;
 
-    this.options.content.style.transition = 'initial';
+    this.slider.style.transition = 'initial';
   }
 
   handleGestureMove(e) {
@@ -214,6 +217,8 @@ class SweetScroll {
   }
 
   run() {
+    this.data.current = this.clamp(this.data.current, 0, this.offsetWidth);
+    
     this.slider.style.transform = this.styles;
     
     this.calculateSpeed();
