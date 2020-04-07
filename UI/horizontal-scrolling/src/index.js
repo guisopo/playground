@@ -210,7 +210,7 @@ class SweetScroll {
     this.initialTouchPos = null;
   }
 
-  calculateSpeed() {
+  calculateScrollingSpeed() {
     this.data.last = this.lerp(this.data.last, this.data.current, this.lerpFactor);
     this.data.scrollingSpeed = Math.floor(this.data.current - this.data.last) / 100;
   }
@@ -222,7 +222,7 @@ class SweetScroll {
     // Apply styles to slider
     this.slider.style.transform = this.styles;
     
-    this.calculateSpeed();
+    this.calculateScrollingSpeed();
 
     // Reset style property
     this.styles = '';
