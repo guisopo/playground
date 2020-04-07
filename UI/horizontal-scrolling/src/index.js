@@ -212,8 +212,6 @@ class SweetScroll {
 
   calculateSpeed() {
     this.data.last = this.lerp(this.data.last, this.data.current, this.lerpFactor);
-    this.data.last = Math.floor(this.data.last * 10000) / 10000;
-
     this.data.scrollingSpeed = Math.floor(this.data.current - this.data.last) / 100;
   }
 
@@ -228,7 +226,7 @@ class SweetScroll {
 
     // Reset style property
     this.styles = '';
-    
+
     for (const key in this.renderStyles) {
       // Add styles to style property
       this.styles += this.renderStyles[key].setStyle();
