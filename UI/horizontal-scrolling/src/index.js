@@ -116,8 +116,8 @@ class SweetScroll {
 
   drag(e) {
     e.preventDefault();
-    // this.data.current = this.data.mouseUp - ((e.clientX - this.data.mouseDown) * this.options.dragSpeed);
-    this.data.current = this.initialSliderOffset - ((e.clientX - this.initialTouchPos.x) * this.dragSpeed);
+    // this.data.current = this.data.mouseUp - ((e.pageX - this.data.mouseDown) * this.options.dragSpeed);
+    this.data.current = this.initialSliderOffset - ((e.pageX - this.initialTouchPos.x) * this.dragSpeed);
   }
 
   getGesturePointFromEvent(e) {
@@ -169,7 +169,7 @@ class SweetScroll {
     e.preventDefault();
 
     if(!this.isDragging || !this.initialTouchPos) return;
-  
+
     this.drag(e);
   }
 
