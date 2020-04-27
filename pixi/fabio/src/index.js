@@ -50,12 +50,13 @@ loader.load((loader, resources) => {
     bunny.filters = [Filter];
 
     Filter.uniforms.uTextureOne = resources.img1.texture;
+    Filter.uniforms.uTextureTwo = resources.img2.texture;
     Filter.uniforms.uTime = 0.;
     // Add the img to the scene we are building
     app.stage.addChild(bunny);
 
     // Listen for frame updates
     app.ticker.add(() => {
-      Filter.uniforms.uTime += 0.05;
+      Filter.uniforms.uTime += 0.02;
     });
 });
