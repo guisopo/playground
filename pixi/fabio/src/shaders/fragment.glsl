@@ -17,7 +17,7 @@ void main() {
   
   float progress = fract(uProgress);
 
-  vec2 uvDivided = fract(uv * vec2(30.,1.));
+  vec2 uvDivided = fract(uv * vec2(50.,1.));
   
   vec2 uvDisplaced1 = uv + rotate(3.1415/4.) * uvDivided * progress * 0.1;
   vec2 uvDisplaced2 = uv + rotate(3.1415/4.) * uvDivided * (1. - progress) * 0.1;
