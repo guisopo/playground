@@ -8,9 +8,10 @@ let img1 = require('./images/pic-2.jpeg');
 let img2 = require('./images/pic-3.jpeg');
 
 
+
 class Window {
 
-  constructor() {
+  constructor(columns, rows) {
     this.nav = document.querySelector('.nav');
 
     this.app = new PIXI.Application({
@@ -20,6 +21,9 @@ class Window {
 
     this.Filter = new PIXI.Filter(null, fragment);
     this.loader = new PIXI.Loader();
+
+    this.columns = columns;
+    this.rows = rows;
   }
 
   bindAll() {
@@ -67,7 +71,9 @@ class Window {
       this.Filter.uniforms.uTextureOne = resources.img1.texture;
       this.Filter.uniforms.uTextureTwo = resources.img2.texture;
       this.Filter.uniforms.uProgress = 0.;
-
+      this.Filter.uniforms.uColumns = `${this.columns}.`;
+      this.Filter.uniforms.uRows = `${this.rows}.`;
+      console.log(this.Filter.uniforms);
       // Add the img to the scene we are building
       this.app.stage.addChild(bunny);
     });
@@ -82,7 +88,7 @@ class Window {
       ease: 'Power3.easeOut',
       onUpdate: () => {
         let number = Math.floor(this.Filter.uniforms.uProgress);
-        
+
         this.Filter.uniforms.uTextureOne = this.loader.resources[`img${number}`].texture;
         if(number<2) {
           this.Filter.uniforms.uTextureTwo = this.loader.resources[`img${number+1}`].texture;
@@ -105,5 +111,5 @@ class Window {
   }
 }
 
-const a = new Window();
+const a = new Window(50, 1);
 a.init();
