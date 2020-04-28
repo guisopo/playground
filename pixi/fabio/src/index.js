@@ -1,3 +1,4 @@
+import "./main.scss";
 import * as PIXI from 'pixi.js';
 import fragment from './shaders/fragment.glsl';
 let img0 = require('./images/pic-1.jpeg');
