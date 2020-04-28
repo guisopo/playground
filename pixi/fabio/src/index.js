@@ -9,21 +9,18 @@ let img2 = require('./images/pic-3.jpeg');
 
 
 
-class Window {
+class Screen {
 
-  constructor(columns, rows) {
-    this.nav = document.querySelector('.nav');
-
-    this.app = new PIXI.Application({
-      width: window.innerWidth,
-      height: window.innerHeight
-    });
-
-    this.Filter = new PIXI.Filter(null, fragment);
-    this.loader = new PIXI.Loader();
-
+  constructor(screen, columns, rows) {
+    this.screen = screen;
+    this.nav = this.screen.querySelector('.nav');
     this.columns = columns;
     this.rows = rows;
+
+    this.screenAspectRatio;
+    this.imageAspectRatio;
+
+    this.init();
   }
 
   bindAll() {
@@ -40,8 +37,22 @@ class Window {
     });
   }
 
+  calculateRatios(width, height) {
+    return width/height;
+  }
+
+  initPixi() {
+    this.app = new PIXI.Application({
+      width: this.screen.offsetWidth,
+      height: this.screen.offsetHeight
+    });
+
+    this.Filter = new PIXI.Filter(null, fragment);
+    this.loader = new PIXI.Loader();
+  }
+
   appendApp() {
-    document.body.appendChild(this.app.view);
+    this.screen.appendChild(this.app.view);
   }
 
   addTextures() {
@@ -53,29 +64,28 @@ class Window {
   loadTextures() {
     this.loader.load((loader, resources) => {
 
-      const bunny = new PIXI.Sprite(resources.img0.texture);
-    
-      // Calculate window and image Aspect Ratio
-      const winAspectRatio = window.innerWidth/window.innerHeight;
-      const imageAspectRatio = resources.img1.texture.width/resources.img1.texture.height;
-  
+      const screenSprite = new PIXI.Sprite(resources.img0.texture);
+      
+      this.screenAspectRatio = this.calculateRatios(this.screen.offsetWidth, this.screen.offsetHeight);
+      this.imageAspectRatio =  this.calculateRatios(resources.img1.texture.width, resources.img1.texture.height);
+
       // Create uniform with aspect ratio value
-      if(winAspectRatio > imageAspectRatio) {
-        this.Filter.uniforms.uvAspect = {x: 1., y: imageAspectRatio/winAspectRatio};
+      if(this.screenAspectRatio > this.imageAspectRatio) {
+        this.Filter.uniforms.uvAspect = {x: 1., y: this.imageAspectRatio/this.screenAspectRatio};
       } else {
-        this.Filter.uniforms.uvAspect = {x: winAspectRatio/imageAspectRatio, y: 1.};
+        this.Filter.uniforms.uvAspect = {x: this.screenAspectRatio/this.imageAspectRatio, y: 1.};
       }
-  
-      bunny.filters = [this.Filter];
+
+      screenSprite.filters = [this.Filter];
 
       this.Filter.uniforms.uTextureOne = resources.img1.texture;
       this.Filter.uniforms.uTextureTwo = resources.img2.texture;
       this.Filter.uniforms.uProgress = 0.;
       this.Filter.uniforms.uColumns = `${this.columns}.`;
       this.Filter.uniforms.uRows = `${this.rows}.`;
-      console.log(this.Filter.uniforms);
+
       // Add the img to the scene we are building
-      this.app.stage.addChild(bunny);
+      this.app.stage.addChild(screenSprite);
     });
   }
 
@@ -104,6 +114,7 @@ class Window {
   init() {
     this.bindAll();
     this.addNavIds();
+    this.initPixi();
     this.appendApp();
     this.addTextures();
     this.loadTextures();
@@ -111,5 +122,7 @@ class Window {
   }
 }
 
-const a = new Window(50, 1);
-a.init();
+const screen = document.getElementById('glsl-window');
+const glslScreen = new Screen(screen, 60, 1);
+const screen2 = document.getElementById('glsl-window-2');
+const glslScreen2 = new Screen(screen2, 60, 1);
