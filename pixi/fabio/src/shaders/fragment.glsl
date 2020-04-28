@@ -14,17 +14,17 @@ mat2 rotate(float a) {
 void main() {
 
   vec2 uv = vec2(vTextureCoord.xy - 0.5) * uvAspect + 0.5;
+  
+  float progress = fract(uProgress);
 
   vec2 uvDivided = fract(uv * vec2(30.,1.));
-
-  float time = abs(sin(uProgress));
   
-  vec2 uvDisplaced1 = uv + rotate(3.1415/4.) * uvDivided * uProgress * 0.1;
-  vec2 uvDisplaced2 = uv + rotate(3.1415/4.) * uvDivided * (1. - uProgress) * 0.1;
+  vec2 uvDisplaced1 = uv + rotate(3.1415/4.) * uvDivided * progress * 0.1;
+  vec2 uvDisplaced2 = uv + rotate(3.1415/4.) * uvDivided * (1. - progress) * 0.1;
 
   
   vec4 img1 = texture2D( uTextureOne, uvDisplaced1);
   vec4 img2 = texture2D( uTextureTwo, uvDisplaced2);
   
-  gl_FragColor = mix(img1, img2, uProgress);
+  gl_FragColor = mix(img1, img2, progress);
 }

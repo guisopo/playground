@@ -70,10 +70,15 @@ loader.load((loader, resources) => {
       const to = e.target.id;
 
       gsap.to(Filter.uniforms, {
-        duration: 1,
+        duration: 0.75,
         uProgress: to,
+        ease: 'Power3.easeOut',
         onUpdate: () => {
-          console.log(Filter.uniforms.uProgress);
+          let number = Math.floor(Filter.uniforms.uProgress);
+          Filter.uniforms.uTextureOne = resources[`img${number}`].texture;
+          if(number<2) {
+            Filter.uniforms.uTextureTwo = resources[`img${number+1}`].texture;
+          }
         }
       }); 
     });
