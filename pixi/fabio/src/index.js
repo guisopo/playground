@@ -1,6 +1,6 @@
 import "./main.scss";
 import * as PIXI from 'pixi.js';
-import {TweenMax} from 'gsap';
+import gsap from 'gsap';
 import fragment from './shaders/fragment.glsl';
 
 let img0 = require('./images/pic-1.jpeg');
@@ -69,10 +69,16 @@ loader.load((loader, resources) => {
     nav.addEventListener('mouseover', (e) => {
       const to = e.target.id;
 
+      gsap.to(Filter.uniforms, {
+        duration: 1,
+        uProgress: to,
+        onUpdate: () => {
+          console.log(Filter.uniforms.uProgress);
+        }
+      }); 
     });
 
     // Listen for frame updates
     app.ticker.add(() => {
-      Filter.uniforms.uTime += 0.02;
     });
 });
