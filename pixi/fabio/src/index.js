@@ -1,9 +1,19 @@
 import "./main.scss";
 import * as PIXI from 'pixi.js';
+import {TweenMax} from 'gsap';
 import fragment from './shaders/fragment.glsl';
+
 let img0 = require('./images/pic-1.jpeg');
 let img1 = require('./images/pic-2.jpeg');
 let img2 = require('./images/pic-3.jpeg');
+
+const nav = document.querySelector('.nav');
+let index = 0;
+
+[...nav.children].forEach(link => {
+  link.id = index;
+  index += 1;
+});
 
 
 const app = new PIXI.Application({
@@ -52,9 +62,14 @@ loader.load((loader, resources) => {
 
     Filter.uniforms.uTextureOne = resources.img1.texture;
     Filter.uniforms.uTextureTwo = resources.img2.texture;
-    Filter.uniforms.uTime = 0.;
+    Filter.uniforms.uProgress = 0.;
     // Add the img to the scene we are building
     app.stage.addChild(bunny);
+
+    nav.addEventListener('mouseover', (e) => {
+      const to = e.target.id;
+
+    });
 
     // Listen for frame updates
     app.ticker.add(() => {
