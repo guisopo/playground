@@ -14,18 +14,18 @@ function raf() {
 
   let i = Math.round(position);
   let diff = i - position;
-
-  // diff = diff < 0 ? Math.max(diff, -0.02) : Math.max(diff, 0.02);
-
+  
   position += diff * 0.03;
+  position > 4.25 ? position = 0 : '';
 
   if(Math.abs(i - position) < 0.001) {
     position = i;
   }
-
+  
   gsap.set('.dot', { y: position*200 });
-
+  
   let currentSlide = Math.floor(position);
+  
   let nextSlide = ( currentSlide + 1 ) % 5;
 
   window.requestAnimationFrame(raf);
