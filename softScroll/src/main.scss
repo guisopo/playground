@@ -1,13 +1,14 @@
 body {
   margin: 0;
-  background-color: #444;
+  background-color: #fff;
+  overflow: hidden;
 }
 
 .measure {
   position: fixed;
   z-index: 1000;
   height: 800px;
-  border-left: 10px solid #fff;
+  border-left: 10px solid green;
   left: 50px;
   top: 50px;
 
@@ -35,5 +36,27 @@ body {
     left: 30px;
     width: 30px;
     height: 30px;
+  }
+  .dot-2 {
+    background-color: red;
+    margin-top: 400px;
+  }
+  .dot-3 {
+    background-color: blue;
+    margin-top: 800px;
+  }
+
+  ul {
+    position: relative;
+
+    li {
+      position: relative;
+      padding: 1rem 0;
+    }
+
+    .li-item-1 {
+      color: red;
+      // transform: translate3d(0, 100%, 0);
+    }
   }
 }
