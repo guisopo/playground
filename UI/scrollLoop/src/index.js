@@ -1,5 +1,2 @@
-import { consoleName } from "./utils/console";
+require('normalize.scss');
 import "./main.scss";
-consoleName('Guillermos');
-
-document.addEventListener('click', () => console.log('hola'));
