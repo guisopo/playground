@@ -5,7 +5,7 @@ const winsize = {width: window.innerWidth, height: window.innerHeight};
 
 class scrollLoop {
   constructor(element) {
-    this.DOM = { element: element};
+    this.DOM = { element: element };
     this.DOM.menuItems = [...this.DOM.element.querySelectorAll('.menu__item')];
 
     this.cloneItems();
@@ -24,7 +24,7 @@ class scrollLoop {
     this.DOM.element.querySelectorAll('.loop__clone').forEach(clone => this.DOM.element.removeChild(clone));
 
     let totalClones = 0;
-    this.DOM.menuItems.filter((_, index) => (index < fitIn)).map(target => {
+    this.DOM.menuItems.filter((_, index) => (index < fitIn)).forEach(target => {
       const clone = target.cloneNode(true);
       clone.classList.add('loop__clone');
       this.DOM.element.appendChild(clone);
@@ -52,10 +52,11 @@ class scrollLoop {
   }
 
   getScrollPos() {
-    console.log(`scrollTop: ${this.DOM.element.scrollTop}`);
-    console.log(`clientTop: ${this.DOM.element.clientTop}`);
+    // console.log(`scrollTop: ${this.DOM.element.scrollTop}`);
+    // console.log(`clientTop: ${this.DOM.element.clientTop}`);
+    // console.log(`pageYOffset: ${window.pageYOffset}`);
 
-    return (this.DOM.element.pageYOffset || this.DOM.element.scrollTop) - (this.DOM.element.clientTop || 0);
+    return (window.pageYOffset || this.DOM.element.scrollTop) - (this.DOM.element.clientTop || 0);
   }
 
   setScrollPos(position) {
