@@ -32,7 +32,7 @@
     "fastdom": "^1.0.9",
     "gsap": "^2.1.2",
     "imagesloaded": "^4.1.4",
-    "node-sass": "^4.14.1",
+    "node-sass": "^7.0.0",
     "normalize.css": "^8.0.1"
   }
 }
